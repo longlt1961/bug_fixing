@@ -89,7 +89,7 @@ class ExecutionServiceNoMongo:
             
             # Change to SonarQ directory
             original_dir = os.getcwd()
-            sonar_dir = "d:\\ILA\\SonarQ"
+            sonar_dir = "d:\\InnoLab\\SonarQ"
             os.chdir(sonar_dir)
             
             try:
@@ -159,7 +159,7 @@ class ExecutionServiceNoMongo:
                 output_file = os.path.join(sonar_dir, f"issues_{self.project_key}.json")
                 export_cmd = [
                     'python', 
-                    'd:\\ILA\\SonarQ\\export_to_file.py', 
+                    'd:\\InnoLab\\SonarQ\\export_to_file.py', 
                     self.project_key,
                     output_file
                 ]

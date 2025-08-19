@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 """
-Script to import RAG bug detector data via API endpoint
+Script to import RAG exceptions data via API endpoint
 """
 
 import json
 import requests
 from pathlib import Path
 
-def import_rag_bug_detector():
-    """Import all RAG bug detector documents via API"""
+def import_rag_exceptions():
+    """Import all RAG exceptions via API"""
     # Load sample data
-    sample_file = Path(__file__).parent / "lib" / "sample_rag_bug_detector.json"
+    sample_file = Path(__file__).parent / "mocks" / "sample_rag_exceptions.json"
     
     with open(sample_file, 'r', encoding='utf-8') as f:
         data = json.load(f)
@@ -19,11 +19,11 @@ def import_rag_bug_detector():
     headers = {'Content-Type': 'application/json'}
     
     success_count = 0
-    total_count = len(data)
+    total_count = len(data['rag_documents'])
     
-    print(f"Importing {total_count} RAG bug detector documents...")
+    print(f"Importing {total_count} RAG exception documents...")
     
-    for i, doc in enumerate(data, 1):
+    for i, doc in enumerate(data['rag_documents'], 1):
         try:
             payload = {
                 "content": doc["content"],
@@ -54,4 +54,4 @@ def import_rag_bug_detector():
         print(f"Could not retrieve stats: {str(e)}")
 
 if __name__ == "__main__":
-    import_rag_bug_detector()
+    import_rag_exceptions()

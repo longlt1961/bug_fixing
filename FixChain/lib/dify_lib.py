@@ -14,17 +14,6 @@ def get_dify_base_url(mode):
     if mode == DifyMode.LOCAL or (isinstance(mode, str) and mode.upper() == "LOCAL"):
         return DIFY_BASE_URL_LOCAL
     return DIFY_BASE_URL
-# def get_dify_base_url(mode):
-#     if str(mode).upper() == "LOCAL":
-#         for url in ["http://api:5001/v1", "http://localhost:5001/v1", "http://127.0.0.1:5001/v1"]:
-#             try:
-#                 requests.get(f"{url}/info", timeout=3)
-#                 return url
-#             except Exception:
-#                 continue
-#         raise RuntimeError("Cannot reach Dify LOCAL at api:5001 or localhost:5001")
-#     return "https://api.dify.ai/v1"
-
 
 
 def get_headers(api_key):

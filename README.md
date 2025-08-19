@@ -97,9 +97,9 @@ python test/test_rag_bug.py
 ```
 
 ### Sample Data
-- `lib/sample_bugs.csv` - Dữ liệu bug mẫu cho CSV import
-- `lib/sample_rag_bugs.json` - Dữ liệu bug mẫu cho RAG import
-- `lib/example_requests.py` - Ví dụ sử dụng API
+- `mocks/sample_bugs.csv` - Dữ liệu bug mẫu cho CSV import
+- `mocks/sample_rag_bugs.json` - Dữ liệu bug mẫu cho RAG import
+- `mocks/sample_rag_bug_detector.json` - Dữ liệu bug detector mẫu cho RAG import
 
 ---
 

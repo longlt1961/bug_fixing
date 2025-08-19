@@ -109,7 +109,8 @@ python test/test_rag_bug.py
 
 ## Sample Data
 
-- `lib/sample_bugs.csv` - Sample bug data for CSV import
-- `lib/sample_rag_bugs.json` - Sample bug data for RAG import
-- `lib/sample_payloads.json` - Sample API request payloads
-- `lib/example_requests.py` - Example API usage scripts
+- `mocks/sample_bugs.csv` - Sample bug data for CSV import
+- `mocks/sample_rag_bugs.json` - Sample bug data for RAG import
+- `mocks/sample_rag_bug_detector.json` - Sample bug detector data for RAG import 
+- `mocks/sample_payloads.json` - Sample API request payloads
+- `mocks/example_requests.py` - Example API usage scripts

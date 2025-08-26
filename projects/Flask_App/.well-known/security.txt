@@ -1,0 +1,4 @@
+// this is a placeholder and the security.txt will be delivered via a route
+// TODO: Implement the generation and delivery of the security.txt file
+// This could involve reading from a file, generating dynamically, and serving via a dedicated route.
+// Example: Add a route to serve a static security.txt file, or generate the file's content dynamically.

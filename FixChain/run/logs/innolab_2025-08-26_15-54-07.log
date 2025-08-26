@@ -1,0 +1,305 @@
+2025-08-26 15:54:07,723 - innolab - INFO - ExecutionServiceNoMongo initialized with:
+2025-08-26 15:54:07,723 - innolab - INFO -   Max iterations: 5
+2025-08-26 15:54:07,723 - innolab - INFO -   Project key: my-service
+2025-08-26 15:54:07,724 - innolab - INFO -   Source code path: c:\Users\HieuLT\Desktop\InnoLab\projects
+2025-08-26 15:54:07,724 - innolab - INFO -   Scan directory: Flask_App
+2025-08-26 15:54:07,724 - innolab - INFO -   Scan mode: ['bearer']
+2025-08-26 15:54:07,724 - innolab - INFO -   Fix mode: ['llm']
+2025-08-26 15:54:07,724 - innolab - INFO -   RAG available: True
+2025-08-26 15:54:07,725 - innolab - INFO - Starting execution without RAG (mode: DifyMode.LOCAL)
+2025-08-26 15:54:07,725 - innolab - INFO - 
+=== ITERATION 1/5 ===
+2025-08-26 15:54:07,725 - innolab - INFO - Starting Bearer scan for project: my-service
+2025-08-26 15:54:07,726 - innolab - INFO - Removed existing Bearer results file: c:\Users\HieuLT\Desktop\InnoLab\projects\SonarQ\bearer_results\bearer_results_my-service.json
+2025-08-26 15:54:07,726 - innolab - INFO - Scanning directory: c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App
+2025-08-26 15:54:07,728 - innolab - ERROR - Command not found: bearer
+2025-08-26 15:54:07,728 - innolab - INFO - Using Bearer Docker image
+2025-08-26 15:54:07,728 - innolab - INFO - Running Bearer Docker scan: docker run --rm -v c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App:/scan -v c:\Users\HieuLT\Desktop\InnoLab\projects\SonarQ\bearer_results:/output bearer/bearer:latest scan /scan --format json --output /output/bearer_results_my-service.json --quiet --skip-path node_modules,*.git,__pycache__,.venv,venv,dist,build
+2025-08-26 15:54:08,759 - innolab - INFO - Analyzing codebase
+2025-08-26 15:54:16,583 - innolab - ERROR - Command failed with return code 1
+2025-08-26 15:54:16,583 - innolab - INFO - Bearer Docker scan completed successfully
+2025-08-26 15:54:16,584 - innolab - INFO - Reading Bearer scan results from: c:\Users\HieuLT\Desktop\InnoLab\projects\SonarQ\bearer_results\bearer_results_my-service.json
+2025-08-26 15:54:16,584 - innolab - INFO - Bearer scan results loaded successfully
+2025-08-26 15:54:16,585 - innolab - INFO - Found 9 Bearer security issues
+2025-08-26 15:54:16,585 - innolab - INFO - BEARER scanner found 9 bugs
+2025-08-26 15:54:16,585 - innolab - INFO - Iteration 1: Found 9 open bugs (0 BUG, 0 CODE_SMELL) across scanners: BEARER
+2025-08-26 15:54:16,586 - innolab - ERROR - Scan directory not found: C:\Users\HieuLT\Desktop\InnoLab\Flask_App
+2025-08-26 15:54:16,586 - innolab - INFO - Need to fix 9 bugs using Dify
+2025-08-26 15:54:16,586 - innolab - INFO - Running workflow with Dify API: app-21rA0wUAaR7PKPdmCX2WJxMo
+2025-08-26 15:54:16,587 - innolab - INFO - User: hieult
+2025-08-26 15:54:16,587 - innolab - INFO - Mode: DifyMode.LOCAL
+2025-08-26 15:54:16,587 - innolab - INFO - Base URL: http://localhost:5001/v1
+2025-08-26 15:54:16,587 - innolab - INFO - Generating Dify headers for api_key: app-21...
+2025-08-26 15:54:16,587 - innolab - INFO - POST http://localhost:5001/v1/workflows/run with payload: {'inputs': {'is_use_rag': 'False', 'src': '', 'report': '[{"key": "bearer_javascript_lang_dynamic_os_command_a15877223715018ff0b40de8ae5380b1_0", "rule": "javascript_lang_dynamic_os_command", "severity": "BLOCKER", "component": "test_vuln.js", "line": 20, "message": "Unsanitized dynamic input in OS command. ## Description\\n\\nIncorporating unsanitized dynamic input directly into operating system commands poses a significant security risk. This practice could give attackers the opportunity to execute harmful...", "status": "OPEN", "type": "VULNERABILITY", "effort": "15min", "debt": "15min", "tags": ["security", "bearer", "critical", "security", "medium", "cwe-78"], "creationDate": "2025-08-26T15:54:16.585164", "updateDate": "2025-08-26T15:54:16.585170", "textRange": {"startLine": 20, "endLine": 20, "startOffset": 5, "endOffset": 7}}, {"key": "bearer_javascript_lang_hardcoded_secret_e9148cb3e49ff316df66e00484a16228_0", "rule": "javascript_lang_hardcoded_secret", "severity": "BLOCKER", "component": "test_vuln.js", "line": 6, "message": "Usage of hard-coded secret. ## Description\\n\\nStoring secrets directly in your code is a security risk. Instead, opt for environment variables or a secret management system to safeguard your secrets.\\n\\n## Remediations\\n\\n- **Do not**...", "status": "OPEN", "type": "VULNERABILITY", "effort": "15min", "debt": "15min", "tags": ["security", "bearer", "critical", "security", "medium", "cwe-798"], "creationDate": "2025-08-26T15:54:16.585213", "updateDate": "2025-08-26T15:54:16.585215", "textRange": {"startLine": 6, "endLine": 6, "startOffset": 1, "endOffset": 39}}, {"key": "bearer_javascript_lang_hardcoded_secret_e9148cb3e49ff316df66e00484a16228_1", "rule": "javascript_lang_hardcoded_secret", "severity": "BLOCKER", "component": "test_vuln.js", "line": 7, "message": "Usage of hard-coded secret. ## Description\\n\\nStoring secrets directly in your code is a security risk. Instead, opt for environment variables or a secret management system to safeguard your secrets.\\n\\n## Remediations\\n\\n- **Do not**...", "status": "OPEN", "type": "VULNERABILITY", "effort": "15min", "debt": "15min", "tags": ["security", "bearer", "critical", "security", "medium", "cwe-798"], "creationDate": "2025-08-26T15:54:16.585235", "updateDate": "2025-08-26T15:54:16.585236", "textRange": {"startLine": 7, "endLine": 7, "startOffset": 1, "endOffset": 32}}, {"key": "bearer_javascript_lang_os_command_injection_cc39913b65829db5799c3ad743e397e7_0", "rule": "javascript_lang_os_command_injection", "severity": "BLOCKER", "component": "test_vuln.js", "line": 20, "message": "Unsanitized user input in OS command. ## Description\\n\\nExecuting operating system commands with unsanitized user input can lead to command injection vulnerabilities. This occurs when attackers manipulate the input to execute unauthorized c...", "status": "OPEN", "type": "VULNERABILITY", "effort": "15min", "debt": "15min", "tags": ["security", "bearer", "critical", "security", "medium", "cwe-78"], "creationDate": "2025-08-26T15:54:16.585254", "updateDate": "2025-08-26T15:54:16.585255", "textRange": {"startLine": 20, "endLine": 20, "startOffset": 5, "endOffset": 7}}, {"key": "bearer_javascript_express_cross_site_scripting_e665897cc7ecdef8d764bb2388077790_0", "rule": "javascript_express_cross_site_scripting", "severity": "CRITICAL", "component": "test_vuln.js", "line": 13, "message": "Unsanitized user input in HTTP response (XSS). ## Description\\n\\nIncluding unsanitized user input in HTTP responses exposes your application to cross-site scripting (XSS) attacks. This vulnerability allows attackers to inject malicious scripts into ...", "status": "OPEN", "type": "VULNERABILITY", "effort": "15min", "debt": "15min", "tags": ["security", "bearer", "high", "security", "medium", "cwe-79"], "creationDate": "2025-08-26T15:54:16.585270", "updateDate": "2025-08-26T15:54:16.585271", "textRange": {"startLine": 13, "endLine": 13, "startOffset": 5, "endOffset": 20}}, {"key": "bearer_javascript_express_cross_site_scripting_e665897cc7ecdef8d764bb2388077790_1", "rule": "javascript_express_cross_site_scripting", "severity": "CRITICAL", "component": "test_vuln.js", "line": 28, "message": "Unsanitized user input in HTTP response (XSS). ## Description\\n\\nIncluding unsanitized user input in HTTP responses exposes your application to cross-site scripting (XSS) attacks. This vulnerability allows attackers to inject malicious scripts into ...", "status": "OPEN", "type": "VULNERABILITY", "effort": "15min", "debt": "15min", "tags": ["security", "bearer", "high", "security", "medium", "cwe-79"], "creationDate": "2025-08-26T15:54:16.585284", "updateDate": "2025-08-26T15:54:16.585285", "textRange": {"startLine": 28, "endLine": 28, "startOffset": 5, "endOffset": 54}}, {"key": "bearer_javascript_lang_raw_html_using_user_input_9be1e223403fc9dcb11396f4579547d6_0", "rule": "javascript_lang_raw_html_using_user_input", "severity": "CRITICAL", "component": "test_vuln.js", "line": 28, "message": "Unsanitized user input in raw HTML strings (XSS). ## Description\\n\\nIncluding unsanitized user input in HTML exposes your application to cross-site scripting (XSS) attacks. This vulnerability allows attackers to inject malicious scripts into web pages ...", "status": "OPEN", "type": "VULNERABILITY", "effort": "15min", "debt": "15min", "tags": ["security", "bearer", "high", "security", "medium", "cwe-79"], "creationDate": "2025-08-26T15:54:16.585301", "updateDate": "2025-08-26T15:54:16.585302", "textRange": {"startLine": 28, "endLine": 28, "startOffset": 14, "endOffset": 53}}, {"key": "bearer_javascript_express_helmet_missing_7fde4398d401d13a4909acdaa783f38f_0", "rule": "javascript_express_helmet_missing", "severity": "MAJOR", "component": "test_vuln.js", "line": 2, "message": "Missing Helmet configuration on HTTP headers. ## Description\\n\\nHelmet can help protect your app from some well-known web vulnerabilities by setting HTTP headers appropriately. Failing to configure Helmet for HTTP headers leaves your application vu...", "status": "OPEN", "type": "VULNERABILITY", "effort": "10min", "debt": "10min", "tags": ["security", "bearer", "medium", "security", "medium", "cwe-693"], "creationDate": "2025-08-26T15:54:16.585424", "updateDate": "2025-08-26T15:54:16.585444", "textRange": {"startLine": 2, "endLine": 2, "startOffset": 13, "endOffset": 22}}, {"key": "bearer_javascript_express_reduce_fingerprint_c72b79444d58bb2e38b078dcb8dcb120_0", "rule": "javascript_express_reduce_fingerprint", "severity": "MAJOR", "component": "test_vuln.js", "line": 2, "message": "Missing server configuration to reduce server fingerprinting. ## Description\\n\\nReducing server fingerprinting enhances security by making it harder for attackers to identify the software your server is running. Server fingerprinting involves analyzing the unique ...", "status": "OPEN", "type": "VULNERABILITY", "effort": "10min", "debt": "10min", "tags": ["security", "bearer", "medium", "security", "medium", "cwe-693"], "creationDate": "2025-08-26T15:54:16.585501", "updateDate": "2025-08-26T15:54:16.585509", "textRange": {"startLine": 2, "endLine": 2, "startOffset": 13, "endOffset": 22}}]'}, 'user': 'hieult', 'response_mode': 'blocking'}
+2025-08-26 15:54:25,780 - innolab - INFO - Dify workflow run response status: 200
+2025-08-26 15:54:25,781 - innolab - INFO - Dify workflow run response: {"task_id": "65aac7ae-9b96-49f6-9e25-63905f647284", "workflow_run_id": "0e08625d-8f9d-40e6-bdc9-a0557b64e149", "data": {"id": "0e08625d-8f9d-40e6-bdc9-a0557b64e149", "workflow_id": "1ab32356-d6d5-4b3b-924e-5a66bb39ab5b", "status": "succeeded", "outputs": {"list_bugs": {"bugs": [{"action": "Fix", "bug_id": "bearer_javascript_express_cross_site_scripting_e665897cc7ecdef8d764bb2388077790_0", "classification": "True Positive", "reason": "Unsanitized user input in HTTP response can lead to XSS attacks, making this a true vulnerability.", "rule_description": "Unsanitized user input in HTTP response (XSS). ## Description\n\nIncluding unsanitized user input in HTTP responses exposes your application to cross-site scripting (XSS) attacks. This vulnerability allows attackers to inject malicious scripts into ...", "rule_key": "javascript_express_cross_site_scripting", "type": "vulnerability"}, {"action": "Fix", "bug_id": "bearer_javascript_express_cross_site_scripting_e665897cc7ecdef8d764bb2388077790_1", "classification": "True Positive", "reason": "Unsanitized user input in HTTP response can lead to XSS attacks, a serious vulnerability.", "rule_description": "Unsanitized user input in HTTP response (XSS). ## Description\n\nIncluding unsanitized user input in HTTP responses exposes your application to cross-site scripting (XSS) attacks. This vulnerability allows attackers to inject malicious scripts into ...", "rule_key": "javascript_express_cross_site_scripting", "type": "vulnerability"}, {"action": "Fix", "bug_id": "bearer_javascript_express_helmet_missing_7fde4398d401d13a4909acdaa783f38f_0", "classification": "True Positive", "reason": "Missing Helmet configuration exposes the application to web vulnerabilities.", "rule_description": "Missing Helmet configuration on HTTP headers. ## Description\n\nHelmet can help protect your app from some well-known web vulnerabilities by setting HTTP headers appropriately. Failing to configure Helmet for HTTP headers leaves your application vu...", "rule_key": "javascript_express_helmet_missing", "type": "vulnerability"}, {"action": "Fix", "bug_id": "bearer_javascript_express_reduce_fingerprint_c72b79444d58bb2e38b078dcb8dcb120_0", "classification": "True Positive", "reason": "Missing server configuration increases the risk of server fingerprinting.", "rule_description": "Missing server configuration to reduce server fingerprinting. ## Description\n\nReducing server fingerprinting enhances security by making it harder for attackers to identify the software your server is running. Server fingerprinting involves analyzing the unique ...", "rule_key": "javascript_express_reduce_fingerprint", "type": "vulnerability"}, {"action": "Fix", "bug_id": "bearer_javascript_lang_dynamic_os_command_a15877223715018ff0b40de8ae5380b1_0", "classification": "True Positive", "reason": "Unsanitized dynamic input in OS command is a command injection vulnerability.", "rule_description": "Unsanitized dynamic input in OS command. ## Description\n\nIncorporating unsanitized dynamic input directly into operating system commands poses a significant security risk. This practice could give attackers the opportunity to execute harmful...", "rule_key": "javascript_lang_dynamic_os_command", "type": "vulnerability"}, {"action": "Fix", "bug_id": "bearer_javascript_lang_hardcoded_secret_e9148cb3e49ff316df66e00484a16228_0", "classification": "True Positive", "reason": "Hardcoded secrets pose a security risk and should be addressed.", "rule_description": "Usage of hard-coded secret. ## Description\n\nStoring secrets directly in your code is a security risk. Instead, opt for environment variables or a secret management system to safeguard your secrets.\n\n## Remediations\n\n- **Do not**...", "rule_key": "javascript_lang_hardcoded_secret", "type": "vulnerability"}, {"action": "Fix", "bug_id": "bearer_javascript_lang_hardcoded_secret_e9148cb3e49ff316df66e00484a16228_1", "classification": "True Positive", "reason": "Hardcoded secrets pose a security risk and should be addressed.", "rule_description": "Usage of hard-coded secret. ## Description\n\nStoring secrets directly in your code is a security risk. Instead, opt for environment variables or a secret management system to safeguard your secrets.\n\n## Remediations\n\n- **Do not**...", "rule_key": "javascript_lang_hardcoded_secret", "type": "vulnerability"}, {"action": "Fix", "bug_id": "bearer_javascript_lang_os_command_injection_cc39913b65829db5799c3ad743e397e7_0", "classification": "True Positive", "reason": "Unsanitized user input in OS command can lead to command injection.", "rule_description": "Unsanitized user input in OS command. ## Description\n\nExecuting operating system commands with unsanitized user input can lead to command injection vulnerabilities. This occurs when attackers manipulate the input to execute unauthorized c...", "rule_key": "javascript_lang_os_command_injection", "type": "vulnerability"}, {"action": "Fix", "bug_id": "bearer_javascript_lang_raw_html_using_user_input_9be1e223403fc9dcb11396f4579547d6_0", "classification": "True Positive", "reason": "Unsanitized user input in raw HTML strings can lead to XSS attacks.", "rule_description": "Unsanitized user input in raw HTML strings (XSS). ## Description\n\nIncluding unsanitized user input in HTML exposes your application to cross-site scripting (XSS) attacks. This vulnerability allows attackers to inject malicious scripts into web pages ...", "rule_key": "javascript_lang_raw_html_using_user_input", "type": "vulnerability"}], "bugs_to_fix": 9.0}, "bugs_to_fix": "{\n  \"bugs\": [\n    {\n      \"action\": \"Fix\",\n      \"bug_id\": \"bearer_javascript_express_cross_site_scripting_e665897cc7ecdef8d764bb2388077790_0\",\n      \"classification\": \"True Positive\",\n      \"reason\": \"Unsanitized user input in HTTP response can lead to XSS attacks, making this a true vulnerability.\",\n      \"rule_description\": \"Unsanitized user input in HTTP response (XSS). ## Description\\n\\nIncluding unsanitized user input in HTTP responses exposes your application to cross-site scripting (XSS) attacks. This vulnerability allows attackers to inject malicious scripts into ...\",\n      \"rule_key\": \"javascript_express_cross_site_scripting\",\n      \"type\": \"vulnerability\"\n    },\n    {\n      \"action\": \"Fix\",\n      \"bug_id\": \"bearer_javascript_express_cross_site_scripting_e665897cc7ecdef8d764bb2388077790_1\",\n      \"classification\": \"True Positive\",\n      \"reason\": \"Unsanitized user input in HTTP response can lead to XSS attacks, a serious vulnerability.\",\n      \"rule_description\": \"Unsanitized user input in HTTP response (XSS). ## Description\\n\\nIncluding unsanitized user input in HTTP responses exposes your application to cross-site scripting (XSS) attacks. This vulnerability allows attackers to inject malicious scripts into ...\",\n      \"rule_key\": \"javascript_express_cross_site_scripting\",\n      \"type\": \"vulnerability\"\n    },\n    {\n      \"action\": \"Fix\",\n      \"bug_id\": \"bearer_javascript_express_helmet_missing_7fde4398d401d13a4909acdaa783f38f_0\",\n      \"classification\": \"True Positive\",\n      \"reason\": \"Missing Helmet configuration exposes the application to web vulnerabilities.\",\n      \"rule_description\": \"Missing Helmet configuration on HTTP headers. ## Description\\n\\nHelmet can help protect your app from some well-known web vulnerabilities by setting HTTP headers appropriately. Failing to configure Helmet for HTTP headers leaves your application vu...\",\n      \"rule_key\": \"javascript_express_helmet_missing\",\n      \"type\": \"vulnerability\"\n    },\n    {\n      \"action\": \"Fix\",\n      \"bug_id\": \"bearer_javascript_express_reduce_fingerprint_c72b79444d58bb2e38b078dcb8dcb120_0\",\n      \"classification\": \"True Positive\",\n      \"reason\": \"Missing server configuration increases the risk of server fingerprinting.\",\n      \"rule_description\": \"Missing server configuration to reduce server fingerprinting. ## Description\\n\\nReducing server fingerprinting enhances security by making it harder for attackers to identify the software your server is running. Server fingerprinting involves analyzing the unique ...\",\n      \"rule_key\": \"javascript_express_reduce_fingerprint\",\n      \"type\": \"vulnerability\"\n    },\n    {\n      \"action\": \"Fix\",\n      \"bug_id\": \"bearer_javascript_lang_dynamic_os_command_a15877223715018ff0b40de8ae5380b1_0\",\n      \"classification\": \"True Positive\",\n      \"reason\": \"Unsanitized dynamic input in OS command is a command injection vulnerability.\",\n      \"rule_description\": \"Unsanitized dynamic input in OS command. ## Description\\n\\nIncorporating unsanitized dynamic input directly into operating system commands poses a significant security risk. This practice could give attackers the opportunity to execute harmful...\",\n      \"rule_key\": \"javascript_lang_dynamic_os_command\",\n      \"type\": \"vulnerability\"\n    },\n    {\n      \"action\": \"Fix\",\n      \"bug_id\": \"bearer_javascript_lang_hardcoded_secret_e9148cb3e49ff316df66e00484a16228_0\",\n      \"classification\": \"True Positive\",\n      \"reason\": \"Hardcoded secrets pose a security risk and should be addressed.\",\n      \"rule_description\": \"Usage of hard-coded secret. ## Description\\n\\nStoring secrets directly in your code is a security risk. Instead, opt for environment variables or a secret management system to safeguard your secrets.\\n\\n## Remediations\\n\\n- **Do not**...\",\n      \"rule_key\": \"javascript_lang_hardcoded_secret\",\n      \"type\": \"vulnerability\"\n    },\n    {\n      \"action\": \"Fix\",\n      \"bug_id\": \"bearer_javascript_lang_hardcoded_secret_e9148cb3e49ff316df66e00484a16228_1\",\n      \"classification\": \"True Positive\",\n      \"reason\": \"Hardcoded secrets pose a security risk and should be addressed.\",\n      \"rule_description\": \"Usage of hard-coded secret. ## Description\\n\\nStoring secrets directly in your code is a security risk. Instead, opt for environment variables or a secret management system to safeguard your secrets.\\n\\n## Remediations\\n\\n- **Do not**...\",\n      \"rule_key\": \"javascript_lang_hardcoded_secret\",\n      \"type\": \"vulnerability\"\n    },\n    {\n      \"action\": \"Fix\",\n      \"bug_id\": \"bearer_javascript_lang_os_command_injection_cc39913b65829db5799c3ad743e397e7_0\",\n      \"classification\": \"True Positive\",\n      \"reason\": \"Unsanitized user input in OS command can lead to command injection.\",\n      \"rule_description\": \"Unsanitized user input in OS command. ## Description\\n\\nExecuting operating system commands with unsanitized user input can lead to command injection vulnerabilities. This occurs when attackers manipulate the input to execute unauthorized c...\",\n      \"rule_key\": \"javascript_lang_os_command_injection\",\n      \"type\": \"vulnerability\"\n    },\n    {\n      \"action\": \"Fix\",\n      \"bug_id\": \"bearer_javascript_lang_raw_html_using_user_input_9be1e223403fc9dcb11396f4579547d6_0\",\n      \"classification\": \"True Positive\",\n      \"reason\": \"Unsanitized user input in raw HTML strings can lead to XSS attacks.\",\n      \"rule_description\": \"Unsanitized user input in raw HTML strings (XSS). ## Description\\n\\nIncluding unsanitized user input in HTML exposes your application to cross-site scripting (XSS) attacks. This vulnerability allows attackers to inject malicious scripts into web pages ...\",\n      \"rule_key\": \"javascript_lang_raw_html_using_user_input\",\n      \"type\": \"vulnerability\"\n    }\n  ],\n  \"bugs_to_fix\": 9.0\n}"}, "error": "", "elapsed_time": 9.072241, "total_tokens": 7747, "total_steps": 4, "created_at": 1756198456, "finished_at": 1756198465}}
+2025-08-26 15:54:25,783 - innolab - INFO - DIFY: list_bugs type: <class 'dict'>, content: {'bugs': [{'action': 'Fix', 'bug_id': 'bearer_javascript_express_cross_site_scripting_e665897cc7ecdef8d764bb2388077790_0', 'classification': 'True Positive', 'reason': 'Unsanitized user input in HTTP response can lead to XSS attacks, making this a true vulnerability.', 'rule_description': 'Unsanitized user input in HTTP response (XSS). ## Description\n\nIncluding unsanitized user input in HTTP responses exposes your application to cross-site scripting (XSS) attacks. This vulnerability allows attackers to inject malicious scripts into ...', 'rule_key': 'javascript_express_cross_site_scripting', 'type': 'vulnerability'}, {'action': 'Fix', 'bug_id': 'bearer_javascript_express_cross_site_scripting_e665897cc7ecdef8d764bb2388077790_1', 'classification': 'True Positive', 'reason': 'Unsanitized user input in HTTP response can lead to XSS attacks, a serious vulnerability.', 'rule_description': 'Unsanitized user input in HTTP response (XSS). ## Description\n\nIncluding unsanitized user input in HTTP responses exposes your application to cross-site scripting (XSS) attacks. This vulnerability allows attackers to inject malicious scripts into ...', 'rule_key': 'javascript_express_cross_site_scripting', 'type': 'vulnerability'}, {'action': 'Fix', 'bug_id': 'bearer_javascript_express_helmet_missing_7fde4398d401d13a4909acdaa783f38f_0', 'classification': 'True Positive', 'reason': 'Missing Helmet configuration exposes the application to web vulnerabilities.', 'rule_description': 'Missing Helmet configuration on HTTP headers. ## Description\n\nHelmet can help protect your app from some well-known web vulnerabilities by setting HTTP headers appropriately. Failing to configure Helmet for HTTP headers leaves your application vu...', 'rule_key': 'javascript_express_helmet_missing', 'type': 'vulnerability'}, {'action': 'Fix', 'bug_id': 'bearer_javascript_express_reduce_fingerprint_c72b79444d58bb2e38b078dcb8dcb120_0', 'classification': 'True Positive', 'reason': 'Missing server configuration increases the risk of server fingerprinting.', 'rule_description': 'Missing server configuration to reduce server fingerprinting. ## Description\n\nReducing server fingerprinting enhances security by making it harder for attackers to identify the software your server is running. Server fingerprinting involves analyzing the unique ...', 'rule_key': 'javascript_express_reduce_fingerprint', 'type': 'vulnerability'}, {'action': 'Fix', 'bug_id': 'bearer_javascript_lang_dynamic_os_command_a15877223715018ff0b40de8ae5380b1_0', 'classification': 'True Positive', 'reason': 'Unsanitized dynamic input in OS command is a command injection vulnerability.', 'rule_description': 'Unsanitized dynamic input in OS command. ## Description\n\nIncorporating unsanitized dynamic input directly into operating system commands poses a significant security risk. This practice could give attackers the opportunity to execute harmful...', 'rule_key': 'javascript_lang_dynamic_os_command', 'type': 'vulnerability'}, {'action': 'Fix', 'bug_id': 'bearer_javascript_lang_hardcoded_secret_e9148cb3e49ff316df66e00484a16228_0', 'classification': 'True Positive', 'reason': 'Hardcoded secrets pose a security risk and should be addressed.', 'rule_description': 'Usage of hard-coded secret. ## Description\n\nStoring secrets directly in your code is a security risk. Instead, opt for environment variables or a secret management system to safeguard your secrets.\n\n## Remediations\n\n- **Do not**...', 'rule_key': 'javascript_lang_hardcoded_secret', 'type': 'vulnerability'}, {'action': 'Fix', 'bug_id': 'bearer_javascript_lang_hardcoded_secret_e9148cb3e49ff316df66e00484a16228_1', 'classification': 'True Positive', 'reason': 'Hardcoded secrets pose a security risk and should be addressed.', 'rule_description': 'Usage of hard-coded secret. ## Description\n\nStoring secrets directly in your code is a security risk. Instead, opt for environment variables or a secret management system to safeguard your secrets.\n\n## Remediations\n\n- **Do not**...', 'rule_key': 'javascript_lang_hardcoded_secret', 'type': 'vulnerability'}, {'action': 'Fix', 'bug_id': 'bearer_javascript_lang_os_command_injection_cc39913b65829db5799c3ad743e397e7_0', 'classification': 'True Positive', 'reason': 'Unsanitized user input in OS command can lead to command injection.', 'rule_description': 'Unsanitized user input in OS command. ## Description\n\nExecuting operating system commands with unsanitized user input can lead to command injection vulnerabilities. This occurs when attackers manipulate the input to execute unauthorized c...', 'rule_key': 'javascript_lang_os_command_injection', 'type': 'vulnerability'}, {'action': 'Fix', 'bug_id': 'bearer_javascript_lang_raw_html_using_user_input_9be1e223403fc9dcb11396f4579547d6_0', 'classification': 'True Positive', 'reason': 'Unsanitized user input in raw HTML strings can lead to XSS attacks.', 'rule_description': 'Unsanitized user input in raw HTML strings (XSS). ## Description\n\nIncluding unsanitized user input in HTML exposes your application to cross-site scripting (XSS) attacks. This vulnerability allows attackers to inject malicious scripts into web pages ...', 'rule_key': 'javascript_lang_raw_html_using_user_input', 'type': 'vulnerability'}], 'bugs_to_fix': 9.0}
+2025-08-26 15:54:25,784 - innolab - INFO - DIFY: Initial bugs_to_fix from response: 9
+2025-08-26 15:54:25,785 - innolab - INFO - Starting fix_bugs for 2 bugs
+2025-08-26 15:54:25,785 - innolab - INFO - DEBUG: scan_directory = Flask_App
+2025-08-26 15:54:25,786 - innolab - INFO - DEBUG: innolab_root = c:\Users\HieuLT\Desktop\InnoLab\projects
+2025-08-26 15:54:25,787 - innolab - INFO - DEBUG: source_dir = c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App
+2025-08-26 15:54:25,787 - innolab - INFO - Fixing bugs in directory: c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App
+2025-08-26 15:54:25,793 - innolab - INFO - Created issues file: c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App\list_real_bugs.json with 2 bugs
+2025-08-26 15:54:25,794 - innolab - INFO - Running command: python C:\Users\HieuLT\Desktop\InnoLab\SonarQ\batch_fix.py c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App --fix --auto --issues-file list_real_bugs.json
+2025-08-26 15:54:34,497 - innolab - INFO - Enhanced Secure Batch Fix Script
+2025-08-26 15:54:34,498 - innolab - INFO - Advanced AI-powered code fixing with validation & safety checks
+2025-08-26 15:54:34,498 - innolab - INFO - ======================================================================
+2025-08-26 15:54:34,498 - innolab - INFO - FIXING Mode Enabled
+2025-08-26 15:54:34,498 - innolab - INFO - Fixing files in-place (overwriting originals)
+2025-08-26 15:54:34,498 - innolab - INFO - Issues file not found: list_real_bugs.json
+2025-08-26 15:54:34,498 - innolab - INFO - Template usage logging enabled: ./logs\template_usage_20250826_155427.log
+2025-08-26 15:54:34,499 - innolab - INFO - Scan Results:
+2025-08-26 15:54:34,499 - innolab - INFO - Directory: c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App
+2025-08-26 15:54:34,499 - innolab - INFO - Found 13 code files
+2025-08-26 15:54:34,499 - innolab - INFO - Files to process:
+2025-08-26 15:54:34,499 - innolab - INFO - 1. app.py
+2025-08-26 15:54:34,499 - innolab - INFO - 2. test_bug.py
+2025-08-26 15:54:34,499 - innolab - INFO - 3. test_vuln.js
+2025-08-26 15:54:34,499 - innolab - INFO - 4. test_vuln.py
+2025-08-26 15:54:34,499 - innolab - INFO - 5. Static\roadmap.txt
+2025-08-26 15:54:34,499 - innolab - INFO - 6. Static\style.css
+2025-08-26 15:54:34,499 - innolab - INFO - 7. Templates\administration.html
+2025-08-26 15:54:34,499 - innolab - INFO - 8. Templates\cust_error.html
+2025-08-26 15:54:34,500 - innolab - INFO - 9. Templates\homepage.html
+2025-08-26 15:54:34,500 - innolab - INFO - 10. Templates\index.html
+2025-08-26 15:54:34,500 - innolab - INFO - ... and 3 more files
+2025-08-26 15:54:34,500 - innolab - INFO - Auto mode: proceeding without confirmation
+2025-08-26 15:54:34,500 - innolab - INFO - ======================================================================
+2025-08-26 15:54:34,500 - innolab - INFO - Starting secure fixing...
+2025-08-26 15:54:34,500 - innolab - INFO - Template usage logging enabled: ./logs\template_usage_20250826_155427.log
+2025-08-26 15:54:34,501 - innolab - INFO - [1/13] Fixing: app.py
+2025-08-26 15:54:34,501 - innolab - INFO - Retry 1: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [violations {
+2025-08-26 15:54:34,501 - innolab - INFO - quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+2025-08-26 15:54:34,501 - innolab - INFO - quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+2025-08-26 15:54:34,501 - innolab - INFO - quota_dimensions {
+2025-08-26 15:54:34,502 - innolab - INFO - key: "model"
+2025-08-26 15:54:34,502 - innolab - INFO - value: "gemini-2.0-flash"
+2025-08-26 15:54:34,502 - innolab - INFO - }
+2025-08-26 15:54:34,502 - innolab - INFO - quota_dimensions {
+2025-08-26 15:54:34,502 - innolab - INFO - key: "location"
+2025-08-26 15:54:34,502 - innolab - INFO - value: "global"
+2025-08-26 15:54:34,502 - innolab - INFO - }
+2025-08-26 15:54:34,503 - innolab - INFO - quota_value: 200
+2025-08-26 15:54:34,503 - innolab - INFO - }
+2025-08-26 15:54:34,503 - innolab - INFO - , links {
+2025-08-26 15:54:34,503 - innolab - INFO - description: "Learn more about Gemini API quotas"
+2025-08-26 15:54:34,503 - innolab - INFO - url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+2025-08-26 15:54:34,503 - innolab - INFO - }
+2025-08-26 15:54:34,503 - innolab - INFO - , retry_delay {
+2025-08-26 15:54:34,503 - innolab - INFO - seconds: 32
+2025-08-26 15:54:34,503 - innolab - INFO - }
+2025-08-26 15:54:34,504 - innolab - INFO - ]
+2025-08-26 15:54:34,504 - innolab - INFO - Retry 2: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [violations {
+2025-08-26 15:54:34,504 - innolab - INFO - quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+2025-08-26 15:54:34,504 - innolab - INFO - quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+2025-08-26 15:54:34,504 - innolab - INFO - quota_dimensions {
+2025-08-26 15:54:34,504 - innolab - INFO - key: "model"
+2025-08-26 15:54:34,505 - innolab - INFO - value: "gemini-2.0-flash"
+2025-08-26 15:54:34,505 - innolab - INFO - }
+2025-08-26 15:54:34,505 - innolab - INFO - quota_dimensions {
+2025-08-26 15:54:34,505 - innolab - INFO - key: "location"
+2025-08-26 15:54:34,505 - innolab - INFO - value: "global"
+2025-08-26 15:54:34,506 - innolab - INFO - }
+2025-08-26 15:54:34,506 - innolab - INFO - quota_value: 200
+2025-08-26 15:54:34,507 - innolab - INFO - }
+2025-08-26 15:54:34,507 - innolab - INFO - , links {
+2025-08-26 15:54:34,508 - innolab - INFO - description: "Learn more about Gemini API quotas"
+2025-08-26 15:54:34,509 - innolab - INFO - url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+2025-08-26 15:54:34,509 - innolab - INFO - }
+2025-08-26 15:54:34,509 - innolab - INFO - , retry_delay {
+2025-08-26 15:54:34,510 - innolab - INFO - seconds: 31
+2025-08-26 15:54:34,510 - innolab - INFO - }
+2025-08-26 15:54:34,511 - innolab - INFO - ]
+2025-08-26 15:54:34,511 - innolab - INFO - Failed: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [violations {
+2025-08-26 15:54:34,511 - innolab - INFO - quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+2025-08-26 15:54:34,511 - innolab - INFO - quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+2025-08-26 15:54:34,511 - innolab - INFO - quota_dimensions {
+2025-08-26 15:54:34,511 - innolab - INFO - key: "model"
+2025-08-26 15:54:34,512 - innolab - INFO - value: "gemini-2.0-flash"
+2025-08-26 15:54:34,512 - innolab - INFO - }
+2025-08-26 15:54:34,512 - innolab - INFO - quota_dimensions {
+2025-08-26 15:54:34,512 - innolab - INFO - key: "location"
+2025-08-26 15:54:34,513 - innolab - INFO - value: "global"
+2025-08-26 15:54:34,513 - innolab - INFO - }
+2025-08-26 15:54:34,513 - innolab - INFO - quota_value: 200
+2025-08-26 15:54:34,514 - innolab - INFO - }
+2025-08-26 15:54:34,514 - innolab - INFO - , links {
+2025-08-26 15:54:34,515 - innolab - INFO - description: "Learn more about Gemini API quotas"
+2025-08-26 15:54:34,515 - innolab - INFO - url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+2025-08-26 15:54:34,515 - innolab - INFO - }
+2025-08-26 15:54:34,516 - innolab - INFO - , retry_delay {
+2025-08-26 15:54:34,516 - innolab - INFO - seconds: 30
+2025-08-26 15:54:34,516 - innolab - INFO - }
+2025-08-26 15:54:34,517 - innolab - INFO - ]
+2025-08-26 15:54:34,517 - innolab - INFO - [2/13] Fixing: test_bug.py
+2025-08-26 15:54:34,517 - innolab - INFO - Retry 1: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [violations {
+2025-08-26 15:54:34,517 - innolab - INFO - quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+2025-08-26 15:54:34,518 - innolab - INFO - quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+2025-08-26 15:54:34,518 - innolab - INFO - quota_dimensions {
+2025-08-26 15:54:34,519 - innolab - INFO - key: "model"
+2025-08-26 15:54:34,519 - innolab - INFO - value: "gemini-2.0-flash"
+2025-08-26 15:54:34,520 - innolab - INFO - }
+2025-08-26 15:54:34,520 - innolab - INFO - quota_dimensions {
+2025-08-26 15:54:34,520 - innolab - INFO - key: "location"
+2025-08-26 15:54:34,521 - innolab - INFO - value: "global"
+2025-08-26 15:54:34,521 - innolab - INFO - }
+2025-08-26 15:54:34,522 - innolab - INFO - quota_value: 200
+2025-08-26 15:54:34,522 - innolab - INFO - }
+2025-08-26 15:54:34,522 - innolab - INFO - , links {
+2025-08-26 15:54:34,523 - innolab - INFO - description: "Learn more about Gemini API quotas"
+2025-08-26 15:54:34,523 - innolab - INFO - url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+2025-08-26 15:54:34,523 - innolab - INFO - }
+2025-08-26 15:54:34,524 - innolab - INFO - , retry_delay {
+2025-08-26 15:54:34,524 - innolab - INFO - seconds: 30
+2025-08-26 15:54:34,525 - innolab - INFO - }
+2025-08-26 15:54:34,525 - innolab - INFO - ]
+2025-08-26 15:54:34,525 - innolab - INFO - Retry 2: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [violations {
+2025-08-26 15:54:34,525 - innolab - INFO - quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+2025-08-26 15:54:34,526 - innolab - INFO - quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+2025-08-26 15:54:34,527 - innolab - INFO - quota_dimensions {
+2025-08-26 15:54:34,527 - innolab - INFO - key: "model"
+2025-08-26 15:54:34,527 - innolab - INFO - value: "gemini-2.0-flash"
+2025-08-26 15:54:34,528 - innolab - INFO - }
+2025-08-26 15:54:34,528 - innolab - INFO - quota_dimensions {
+2025-08-26 15:54:34,528 - innolab - INFO - key: "location"
+2025-08-26 15:54:34,529 - innolab - INFO - value: "global"
+2025-08-26 15:54:34,529 - innolab - INFO - }
+2025-08-26 15:54:34,529 - innolab - INFO - quota_value: 200
+2025-08-26 15:54:34,530 - innolab - INFO - }
+2025-08-26 15:54:34,530 - innolab - INFO - , links {
+2025-08-26 15:54:34,530 - innolab - INFO - description: "Learn more about Gemini API quotas"
+2025-08-26 15:54:34,531 - innolab - INFO - url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+2025-08-26 15:54:34,531 - innolab - INFO - }
+2025-08-26 15:54:34,531 - innolab - INFO - , retry_delay {
+2025-08-26 15:54:34,532 - innolab - INFO - seconds: 29
+2025-08-26 15:54:34,532 - innolab - INFO - }
+2025-08-26 15:54:34,532 - innolab - INFO - ]
+2025-08-26 15:54:34,532 - innolab - INFO - Failed: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [violations {
+2025-08-26 15:54:34,533 - innolab - INFO - quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+2025-08-26 15:54:34,533 - innolab - INFO - quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+2025-08-26 15:54:34,534 - innolab - INFO - quota_dimensions {
+2025-08-26 15:54:34,534 - innolab - INFO - key: "model"
+2025-08-26 15:54:34,534 - innolab - INFO - value: "gemini-2.0-flash"
+2025-08-26 15:54:34,535 - innolab - INFO - }
+2025-08-26 15:54:34,535 - innolab - INFO - quota_dimensions {
+2025-08-26 15:54:34,535 - innolab - INFO - key: "location"
+2025-08-26 15:54:34,535 - innolab - INFO - value: "global"
+2025-08-26 15:54:34,536 - innolab - INFO - }
+2025-08-26 15:54:34,536 - innolab - INFO - quota_value: 200
+2025-08-26 15:54:34,536 - innolab - INFO - }
+2025-08-26 15:54:34,537 - innolab - INFO - , links {
+2025-08-26 15:54:34,537 - innolab - INFO - description: "Learn more about Gemini API quotas"
+2025-08-26 15:54:34,537 - innolab - INFO - url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+2025-08-26 15:54:34,538 - innolab - INFO - }
+2025-08-26 15:54:34,538 - innolab - INFO - , retry_delay {
+2025-08-26 15:54:34,538 - innolab - INFO - seconds: 28
+2025-08-26 15:54:34,538 - innolab - INFO - }
+2025-08-26 15:54:34,539 - innolab - INFO - ]
+2025-08-26 15:54:34,539 - innolab - INFO - [3/13] Fixing: test_vuln.js
+2025-08-26 15:54:34,539 - innolab - INFO - Retry 1: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [violations {
+2025-08-26 15:54:34,540 - innolab - INFO - quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+2025-08-26 15:54:34,540 - innolab - INFO - quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+2025-08-26 15:54:34,540 - innolab - INFO - quota_dimensions {
+2025-08-26 15:54:34,540 - innolab - INFO - key: "model"
+2025-08-26 15:54:34,540 - innolab - INFO - value: "gemini-2.0-flash"
+2025-08-26 15:54:34,541 - innolab - INFO - }
+2025-08-26 15:54:34,541 - innolab - INFO - quota_dimensions {
+2025-08-26 15:54:34,541 - innolab - INFO - key: "location"
+2025-08-26 15:54:34,542 - innolab - INFO - value: "global"
+2025-08-26 15:54:34,542 - innolab - INFO - }
+2025-08-26 15:54:34,542 - innolab - INFO - quota_value: 200
+2025-08-26 15:54:34,543 - innolab - INFO - }
+2025-08-26 15:54:34,543 - innolab - INFO - , links {
+2025-08-26 15:54:34,543 - innolab - INFO - description: "Learn more about Gemini API quotas"
+2025-08-26 15:54:34,543 - innolab - INFO - url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+2025-08-26 15:54:34,543 - innolab - INFO - }
+2025-08-26 15:54:34,544 - innolab - INFO - , retry_delay {
+2025-08-26 15:54:34,544 - innolab - INFO - seconds: 28
+2025-08-26 15:54:34,544 - innolab - INFO - }
+2025-08-26 15:54:34,544 - innolab - INFO - ]
+2025-08-26 15:54:34,544 - innolab - INFO - Retry 2: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [violations {
+2025-08-26 15:54:34,545 - innolab - INFO - quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+2025-08-26 15:54:34,545 - innolab - INFO - quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+2025-08-26 15:54:34,545 - innolab - INFO - quota_dimensions {
+2025-08-26 15:54:34,545 - innolab - INFO - key: "model"
+2025-08-26 15:54:34,545 - innolab - INFO - value: "gemini-2.0-flash"
+2025-08-26 15:54:34,545 - innolab - INFO - }
+2025-08-26 15:54:34,546 - innolab - INFO - quota_dimensions {
+2025-08-26 15:54:34,546 - innolab - INFO - key: "location"
+2025-08-26 15:54:34,546 - innolab - INFO - value: "global"
+2025-08-26 15:54:34,546 - innolab - INFO - }
+2025-08-26 15:54:34,546 - innolab - INFO - quota_value: 200
+2025-08-26 15:54:34,546 - innolab - INFO - }
+2025-08-26 15:54:34,547 - innolab - INFO - , links {
+2025-08-26 15:54:34,547 - innolab - INFO - description: "Learn more about Gemini API quotas"
+2025-08-26 15:54:34,547 - innolab - INFO - url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+2025-08-26 15:54:34,547 - innolab - INFO - }
+2025-08-26 15:54:34,547 - innolab - INFO - , retry_delay {
+2025-08-26 15:54:34,547 - innolab - INFO - seconds: 27
+2025-08-26 15:54:34,547 - innolab - INFO - }
+2025-08-26 15:54:34,548 - innolab - INFO - ]
+2025-08-26 15:54:34,548 - innolab - INFO - Failed: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [violations {
+2025-08-26 15:54:34,548 - innolab - INFO - quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+2025-08-26 15:54:34,548 - innolab - INFO - quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+2025-08-26 15:54:34,548 - innolab - INFO - quota_dimensions {
+2025-08-26 15:54:34,549 - innolab - INFO - key: "model"
+2025-08-26 15:54:34,549 - innolab - INFO - value: "gemini-2.0-flash"
+2025-08-26 15:54:34,549 - innolab - INFO - }
+2025-08-26 15:54:34,549 - innolab - INFO - quota_dimensions {
+2025-08-26 15:54:34,549 - innolab - INFO - key: "location"
+2025-08-26 15:54:34,549 - innolab - INFO - value: "global"
+2025-08-26 15:54:34,549 - innolab - INFO - }
+2025-08-26 15:54:34,550 - innolab - INFO - quota_value: 200
+2025-08-26 15:54:34,550 - innolab - INFO - }
+2025-08-26 15:54:34,550 - innolab - INFO - , links {
+2025-08-26 15:54:34,551 - innolab - INFO - description: "Learn more about Gemini API quotas"
+2025-08-26 15:54:34,551 - innolab - INFO - url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+2025-08-26 15:54:34,551 - innolab - INFO - }
+2025-08-26 15:54:34,551 - innolab - INFO - , retry_delay {
+2025-08-26 15:54:34,551 - innolab - INFO - seconds: 27
+2025-08-26 15:54:34,551 - innolab - INFO - }
+2025-08-26 15:54:34,551 - innolab - INFO - ]
+2025-08-26 15:54:34,551 - innolab - INFO - [4/13] Fixing: test_vuln.py
+2025-08-26 15:54:34,552 - innolab - INFO - Retry 1: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [violations {
+2025-08-26 15:54:34,552 - innolab - INFO - quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+2025-08-26 15:54:34,552 - innolab - INFO - quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+2025-08-26 15:54:34,552 - innolab - INFO - quota_dimensions {
+2025-08-26 15:54:34,552 - innolab - INFO - key: "model"
+2025-08-26 15:54:34,552 - innolab - INFO - value: "gemini-2.0-flash"
+2025-08-26 15:54:34,552 - innolab - INFO - }
+2025-08-26 15:54:34,552 - innolab - INFO - quota_dimensions {
+2025-08-26 15:54:34,552 - innolab - INFO - key: "location"
+2025-08-26 15:54:34,552 - innolab - INFO - value: "global"
+2025-08-26 15:54:34,552 - innolab - INFO - }
+2025-08-26 15:54:34,552 - innolab - INFO - quota_value: 200
+2025-08-26 15:54:34,553 - innolab - INFO - }
+2025-08-26 15:54:34,553 - innolab - INFO - , links {
+2025-08-26 15:54:34,553 - innolab - INFO - description: "Learn more about Gemini API quotas"
+2025-08-26 15:54:34,553 - innolab - INFO - url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+2025-08-26 15:54:34,553 - innolab - INFO - }
+2025-08-26 15:54:34,553 - innolab - INFO - , retry_delay {
+2025-08-26 15:54:34,553 - innolab - INFO - seconds: 26
+2025-08-26 15:54:34,553 - innolab - INFO - }
+2025-08-26 15:54:34,553 - innolab - INFO - ]
+2025-08-26 15:54:34,553 - innolab - INFO - Retry 2: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [violations {
+2025-08-26 15:54:34,553 - innolab - INFO - quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+2025-08-26 15:54:34,553 - innolab - INFO - quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+2025-08-26 15:54:34,554 - innolab - INFO - quota_dimensions {
+2025-08-26 15:54:34,554 - innolab - INFO - key: "model"
+2025-08-26 15:54:34,554 - innolab - INFO - value: "gemini-2.0-flash"
+2025-08-26 15:54:34,554 - innolab - INFO - }
+2025-08-26 15:54:34,554 - innolab - INFO - quota_dimensions {
+2025-08-26 15:54:34,554 - innolab - INFO - key: "location"
+2025-08-26 15:54:34,554 - innolab - INFO - value: "global"
+2025-08-26 15:54:34,554 - innolab - INFO - }
+2025-08-26 15:54:34,554 - innolab - INFO - quota_value: 200
+2025-08-26 15:54:34,554 - innolab - INFO - }
+2025-08-26 15:54:34,555 - innolab - INFO - , links {
+2025-08-26 15:54:34,555 - innolab - INFO - description: "Learn more about Gemini API quotas"
+2025-08-26 15:54:34,555 - innolab - INFO - url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+2025-08-26 15:54:34,555 - innolab - INFO - }
+2025-08-26 15:54:34,555 - innolab - INFO - , retry_delay {
+2025-08-26 15:54:34,555 - innolab - INFO - seconds: 26
+2025-08-26 15:54:34,555 - innolab - INFO - }
+2025-08-26 15:54:41,120 - innolab - INFO - Cleaned up temporary issues file: c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App\list_real_bugs.json

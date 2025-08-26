@@ -66,7 +66,8 @@ def test_simple_fix():
             template_type='fix',
             custom_prompt=None,
             max_retries=1,  # Reduce retries for debugging
-            issues_data=issues_data
+            issues_data=issues_data,
+            enable_rag=True  # Enable RAG for testing
         )
         
         print(f"\nResult: {result.success}")

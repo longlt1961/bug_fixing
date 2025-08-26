@@ -12,6 +12,13 @@ You are a Senior Software Engineer. Act to fix real production bugs with minimal
 {{ issues_log }}
 ```
 
+{% if has_rag_suggestion %}
+- Similar fixes from knowledge base:
+```
+{{ rag_suggestion }}
+```
+{% endif %}
+
 ### Ground Truth Policy (Log-First)
 - Treat the classification in the issues log as authoritative:
   - If label is True Positive (or aliases: "true", "tp", "bug", "valid") ⇒ consider it a real bug to fix.

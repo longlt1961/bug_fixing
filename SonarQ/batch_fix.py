@@ -26,6 +26,7 @@ from datetime import datetime
 import tempfile
 import fnmatch
 import requests
+from rag_service import RAGService, RAGSearchResult, RAGAddResult
 
 @dataclass
 class FixResult:
@@ -166,6 +167,9 @@ class SecureFixProcessor:
         self.source_dir = os.path.abspath(source_dir)  # Store absolute path of source directory
         self.validator = CodeValidator()
         self.ignore_patterns = []
+        
+        # Initialize RAG service
+        self.rag_service = RAGService()
         
         # Create unique backup directory with timestamp - DISABLED
         # if backup_dir:
@@ -409,6 +413,11 @@ class SecureFixProcessor:
             # backup_path = self._create_backup(file_path)
             backup_path = None
             
+            # Search RAG for similar fixes if enabled
+            rag_suggestion = None
+            if enable_rag:
+                rag_suggestion = self.search_rag_for_similar_fixes(file_path, issues_data)
+            
             # Attempt fix with retries
             fixed_code = None
             validation_errors = []
@@ -425,6 +434,14 @@ class SecureFixProcessor:
                     template, template_vars = self._load_prompt_template(template_type, custom_prompt)
                     if template is None:
                         raise Exception("Template not found. Please add template files to prompt directory.")
+                    
+                    # Add RAG suggestion to template variables if available
+                    if rag_suggestion:
+                        template_vars['rag_suggestion'] = rag_suggestion
+                        template_vars['has_rag_suggestion'] = True
+                    else:
+                        template_vars['rag_suggestion'] = ''
+                        template_vars['has_rag_suggestion'] = False
                     
                     prompt = template.render(
                         original_code=original_code, 
@@ -657,9 +674,31 @@ Chỉ trả về code đã sửa, không cần markdown formatting hay giải th
         except Exception as e:
             print(f"Warning: Could not log AI response: {e}")
     
+    def search_rag_for_similar_fixes(self, file_path: str, issues_data: List[Dict] = None) -> Optional[str]:
+        """Search RAG for similar bug fixes"""
+        try:
+            if not issues_data:
+                return None
+            
+            # Use RAG service to search for similar fixes
+            search_result = self.rag_service.search_rag_knowledge(issues_data, limit=3)
+            
+            if search_result.success and search_result.sources:
+                print(f"  🔍 Found {len(search_result.sources)} similar fixes in RAG")
+                
+                # Get RAG context for prompt enhancement
+                rag_context = self.rag_service.get_rag_context_for_prompt(issues_data)
+                return rag_context
+            
+            return None
+            
+        except Exception as e:
+            print(f"  ⚠️ Warning: RAG search failed: {str(e)}")
+            return None
+    
     def add_bug_to_rag(self, fix_result: FixResult, issues_data: List[Dict] = None, 
                        raw_response: str = "", fixed_code: str = "") -> bool:
-        """Add fixed bug information to RAG system via API"""
+        """Add fixed bug information to RAG system using RAGService"""
         try:
             # Prepare bug context from issues_data
             bug_context = []
@@ -691,54 +730,58 @@ Chỉ trả về code đã sửa, không cần markdown formatting hay giải th
             }
             code_language = language_map.get(file_ext, 'text')
             
-            # Build JSON payload according to the specified format
-            payload = {
-                "content": f"Bug: Fixed {len(fix_summary)} issues in {os.path.basename(fix_result.file_path)}",
-                "metadata": {
-                    "bug_title": f"Fixed issues in {os.path.basename(fix_result.file_path)}",
-                    "bug_context": bug_context if bug_context else ["No specific bug context available"],
-                    "fix_summary": fix_summary if fix_summary else [{
-                        "title": "General code improvement",
-                        "why": "Applied AI-generated fixes",
-                        "change": "Code quality and bug fixes"
-                    }],
-                    "fixed_source_present": bool(fixed_code),
-                    "code_language": code_language,
-                    "code": fixed_code if fixed_code else "",
-                    "file_path": fix_result.file_path,
-                    "original_size": fix_result.original_size,
-                    "fixed_size": fix_result.fixed_size,
-                    "similarity_ratio": fix_result.similarity_ratio,
-                    "input_tokens": fix_result.input_tokens,
-                    "output_tokens": fix_result.output_tokens,
-                    "total_tokens": fix_result.total_tokens,
-                    "processing_time": fix_result.processing_time,
-                    "meets_threshold": fix_result.meets_threshold,
-                    "validation_errors": fix_result.validation_errors,
-                    "issues_found": fix_result.issues_found,
-                    "raw_ai_response": raw_response[:1000] if raw_response else ""  # Limit to 1000 chars
-                }
+            # Prepare content and metadata for RAG
+            content = f"Bug: Fixed {len(fix_summary)} issues in {os.path.basename(fix_result.file_path)}"
+            metadata = {
+                "bug_title": f"Fixed issues in {os.path.basename(fix_result.file_path)}",
+                "bug_context": bug_context if bug_context else ["No specific bug context available"],
+                "fix_summary": fix_summary if fix_summary else [{
+                    "title": "General code improvement",
+                    "why": "Applied AI-generated fixes",
+                    "change": "Code quality and bug fixes"
+                }],
+                "fixed_source_present": bool(fixed_code),
+                "code_language": code_language,
+                "code": fixed_code if fixed_code else "",
+                "file_path": fix_result.file_path,
+                "original_size": fix_result.original_size,
+                "fixed_size": fix_result.fixed_size,
+                "similarity_ratio": fix_result.similarity_ratio,
+                "input_tokens": fix_result.input_tokens,
+                "output_tokens": fix_result.output_tokens,
+                "total_tokens": fix_result.total_tokens,
+                "processing_time": fix_result.processing_time,
+                "meets_threshold": fix_result.meets_threshold,
+                "validation_errors": fix_result.validation_errors,
+                "issues_found": fix_result.issues_found,
+                "raw_ai_response": raw_response[:1000] if raw_response else ""  # Limit to 1000 chars
             }
             
-            # Send POST request to RAG API
-            api_url = "http://192.168.5.11:8000/api/v1/rag/reasoning/add"
-            headers = {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
+            # Prepare fix context for RAG service
+            fix_context = {
+                'file_path': fix_result.file_path,
+                'original_size': fix_result.original_size,
+                'fixed_size': fix_result.fixed_size,
+                'similarity_ratio': fix_result.similarity_ratio,
+                'input_tokens': fix_result.input_tokens,
+                'output_tokens': fix_result.output_tokens,
+                'total_tokens': fix_result.total_tokens,
+                'processing_time': fix_result.processing_time,
+                'meets_threshold': fix_result.meets_threshold,
+                'validation_errors': fix_result.validation_errors,
+                'issues_found': fix_result.issues_found
             }
             
-            response = requests.post(api_url, json=payload, headers=headers, timeout=30)
+            # Use RAG service to add the fix
+            result = self.rag_service.add_fix_to_rag(fix_context, issues_data, raw_response, fixed_code)
             
-            if response.status_code == 200 or response.status_code == 201:
+            if result.success:
                 print(f"  ✅ Successfully added bug fix to RAG: {os.path.basename(fix_result.file_path)}")
                 return True
             else:
-                print(f"  ❌ Failed to add to RAG (HTTP {response.status_code}): {response.text[:200]}")
+                print(f"  ❌ Failed to add to RAG: {result.error_message}")
                 return False
                 
-        except requests.exceptions.RequestException as e:
-            print(f"  ❌ RAG API request failed: {str(e)}")
-            return False
         except Exception as e:
             print(f"  ❌ Error adding to RAG: {str(e)}")
             return False

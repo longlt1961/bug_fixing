@@ -23,7 +23,7 @@ class LLMFixer(Fixer):
             if os.path.isabs(self.scan_directory):
                 source_dir = self.scan_directory
             else:
-                innolab_root = os.getenv("INNOLAB_ROOT_PATH", "d:\\InnoLab")
+                innolab_root = os.getenv("INNOLAB_ROOT_PATH", "c:\\Users\\HieuLT\\Desktop\\InnoLab\\projects")
                 logger.info(f"DEBUG: innolab_root = {innolab_root}")
                 # Use scan_directory directly with innolab_root
                 source_dir = os.path.join(innolab_root, self.scan_directory)
@@ -37,8 +37,9 @@ class LLMFixer(Fixer):
                     "error": f"Source directory does not exist: {source_dir}",
                 }
             original_dir = os.getcwd()
-            # SonarQ is always at d:\InnoLab\SonarQ regardless of INNOLAB_ROOT_PATH
-            sonar_dir = "d:\\InnoLab\\SonarQ"
+            # Get SonarQ directory relative to the actual InnoLab root
+            actual_innolab_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+            sonar_dir = os.path.join(actual_innolab_root, "SonarQ")
             try:
                 os.chdir(sonar_dir)
                 # Create issues file in the project directory instead of SonarQ directory

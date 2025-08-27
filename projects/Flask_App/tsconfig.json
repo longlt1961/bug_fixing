@@ -1,41 +1,27 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
-    "outDir": "./build",
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
-    "module": "commonjs",
-    "target": "es2020",
-    "moduleResolution": "node",
-    "sourceMap": true,
-    "strict": true,
-    "esModuleInterop": true,
+    "target": "ES6",
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
-    "lib": [
-      "es2020"
-    ]
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./*"]
+    }
   },
-  "include": [
-    "cypress/**/*.ts",
-    "data/**/*.ts",
-    "lib/**/*.ts",
-    "lib/**/*.js",
-    "models/**/*.ts",
-    "routes/**/*.ts",
-    "test/**/*.ts",
-    "views/**/*.ts",
-    "views/**/*.js",
-    "rsn/**/*.ts",
-    "*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "frontend",
-    "dist",
-    "build",
-    "vagrant",
-    "data/static/codefixes/**",
-    "**/*.d.ts"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
 }

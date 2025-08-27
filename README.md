@@ -4,12 +4,106 @@ Dự án ILA bao gồm hai phần chính:
 1. **FixChain** - Hệ thống quản lý bug và RAG (Retrieval-Augmented Generation) với MongoDB và Gemini AI
 2. **SonarQ** - Hệ thống phân tích code quality với SonarQube
 
+## 🎯 Quick Start - Chạy Full Pipeline
+
+### Lệnh Chạy Full Run
+```bash
+cd FixChain
+python run_demo.py --mode local --scanners bearer --project Flask_App --insert_rag
+```
+
+**Giải thích tham số:**
+- `--mode local`: Sử dụng Dify API local thay vì cloud
+- `--scanners bearer`: Sử dụng Bearer scanner để quét lỗ hổng bảo mật
+- `--project Flask_App`: Quét dự án Flask_App trong thư mục projects/
+- `--insert_rag`: Kích hoạt chức năng RAG (Retrieval-Augmented Generation) để cải thiện khả năng sửa lỗi
+
+### Các Tùy Chọn Khác
+
+**Chạy với SonarQube scanner:**
+```bash
+python run_demo.py --mode cloud --scanners sonar --project Flask_App
+```
+
+**Chạy với nhiều scanner:**
+```bash
+python run_demo.py --mode local --scanners "bearer,sonar" --project Flask_App --insert_rag
+```
+
+**Chạy với dự án khác:**
+```bash
+python run_demo.py --mode local --scanners bearer --project SonarQ --insert_rag
+```
+
+### Yêu Cầu Trước Khi Chạy
+
+1. **Cấu hình API Keys trong file `.env`:**
+   ```env
+   DIFY_CLOUD_API_KEY=your_dify_cloud_api_key
+   DIFY_LOCAL_API_KEY=your_dify_local_api_key
+   GEMINI_API_KEY=your_gemini_api_key
+   RAG_DATASET_PATH=path/to/your/rag/dataset.json
+   ```
+
+2. **Cài đặt dependencies:**
+   ```bash
+   cd FixChain
+   pip install -r requirements.txt
+   ```
+
+3. **Đảm bảo dự án cần quét tồn tại:**
+   - Dự án phải nằm trong thư mục `projects/`
+   - Ví dụ: `projects/Flask_App/` cho tham số `--project Flask_App`
+
+### Kết Quả Mong Đợi
+
+Lệnh sẽ thực hiện:
+1. **Quét lỗi** bằng Bearer scanner (hoặc scanner được chỉ định)
+2. **Phân tích lỗi** bằng AI (Dify + Gemini)
+3. **Sửa lỗi tự động** với hỗ trợ RAG
+4. **Lặp lại** tối đa 5 lần cho đến khi không còn lỗi
+5. **Ghi log** chi tiết quá trình và kết quả
+
+---
+
 ## 📋 Yêu Cầu Hệ Thống
 
 - Docker và Docker Compose
 - Python 3.8+
 - Git
 - Ít nhất 4GB RAM (cho SonarQube)
+- Bearer CLI (cho Bearer scanner)
+
+### Cài Đặt Bearer CLI
+
+**Windows:**
+```powershell
+# Sử dụng Chocolatey
+choco install bearer
+
+# Hoặc tải về từ GitHub Releases
+# https://github.com/Bearer/bearer/releases
+```
+
+**macOS:**
+```bash
+# Sử dụng Homebrew
+brew install bearer/tap/bearer
+```
+
+**Linux:**
+```bash
+# Sử dụng curl
+curl -sfL https://raw.githubusercontent.com/Bearer/bearer/main/contrib/install.sh | sh
+
+# Hoặc sử dụng package manager
+sudo apt-get install bearer  # Ubuntu/Debian
+```
+
+**Kiểm tra cài đặt:**
+```bash
+bearer version
+```
 
 ## 🚀 Phần 1: FixChain - Hệ Thống Quản Lý Bug và RAG
 
@@ -212,6 +306,14 @@ docker run --rm `
 
 ## 🔧 Troubleshooting
 
+### run_demo.py Issues
+- **Bearer command not found:** Cài đặt Bearer CLI theo hướng dẫn ở trên
+- **Project directory not found:** Đảm bảo dự án tồn tại trong thư mục `projects/`
+- **Dify API error:** Kiểm tra API keys trong file `.env`
+- **RAG dataset not found:** Đặt đúng đường dẫn `RAG_DATASET_PATH` trong `.env`
+- **Permission denied:** Chạy terminal với quyền administrator (Windows)
+- **Module not found:** Chạy `pip install -r requirements.txt` trong thư mục FixChain
+
 ### FixChain Issues
 - **MongoDB connection failed:** Kiểm tra MongoDB container đã chạy
 - **Gemini API error:** Verify API key trong file `.env`
@@ -222,6 +324,11 @@ docker run --rm `
 - **Scan failed:** Kiểm tra token và network connectivity
 - **Export script error:** Verify project đã được scan và có issues
 
+### Bearer Scanner Issues
+- **Bearer scan timeout:** Tăng timeout trong cấu hình hoặc giảm kích thước dự án
+- **No security issues found:** Bearer chỉ tìm lỗ hổng bảo mật, không phải code quality
+- **Bearer results not found:** Kiểm tra quyền ghi file trong thư mục `SonarQ/bearer_results/`
+
 ## 📝 Lưu Ý Quan Trọng
 
 1. **Gemini API Key:** Cần đăng ký tại [Google AI Studio](https://makersuite.google.com/app/apikey)
@@ -229,8 +336,16 @@ docker run --rm `
 3. **Network:** Đảm bảo các ports cần thiết không bị block
 4. **Data Persistence:** Dữ liệu MongoDB và SonarQube được lưu trong Docker volumes
 
-## 🚀 Quick Start (Chạy Cả Hai Dự Án)
+## 🚀 Quick Start
 
+### Option 1: Chạy Full Pipeline (Khuyến nghị)
+```bash
+# Chạy pipeline tự động sửa lỗi với Bearer scanner và RAG
+cd FixChain
+python run_demo.py --mode local --scanners bearer --project Flask_App --insert_rag
+```
+
+### Option 2: Chạy Cả Hai Dự Án (Development)
 ```bash
 # Terminal 1 - FixChain
 cd FixChain

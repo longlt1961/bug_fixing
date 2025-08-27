@@ -1,0 +1,37 @@
+2025-08-27 09:35:07,392 - innolab - INFO - ExecutionServiceNoMongo initialized with:
+2025-08-27 09:35:07,393 - innolab - INFO -   Max iterations: 5
+2025-08-27 09:35:07,393 - innolab - INFO -   Project key: my-service
+2025-08-27 09:35:07,393 - innolab - INFO -   Source code path: c:\Users\HieuLT\Desktop\InnoLab\projects
+2025-08-27 09:35:07,394 - innolab - INFO -   Scan directory: Flask_App
+2025-08-27 09:35:07,394 - innolab - INFO -   Scan mode: ['bearer']
+2025-08-27 09:35:07,394 - innolab - INFO -   Fix mode: ['llm']
+2025-08-27 09:35:07,395 - innolab - INFO -   RAG available: True
+2025-08-27 09:35:07,396 - innolab - INFO - Starting execution without RAG (mode: DifyMode.LOCAL)
+2025-08-27 09:35:07,396 - innolab - INFO - 
+=== ITERATION 1/5 ===
+2025-08-27 09:35:07,397 - innolab - INFO - Starting Bearer scan for project: my-service
+2025-08-27 09:35:07,398 - innolab - INFO - Scanning directory: c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App
+2025-08-27 09:35:07,402 - innolab - ERROR - Command not found: bearer
+2025-08-27 09:35:07,403 - innolab - INFO - Using Bearer Docker image
+2025-08-27 09:35:07,403 - innolab - INFO - Running Bearer Docker scan: docker run --rm -v c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App:/scan -v c:\Users\HieuLT\Desktop\InnoLab\projects\SonarQ\bearer_results:/output bearer/bearer:latest scan /scan --format json --output /output/bearer_results_my-service.json --quiet --skip-path node_modules,*.git,__pycache__,.venv,venv,dist,build
+2025-08-27 09:35:09,509 - innolab - INFO - Analyzing codebase
+2025-08-27 09:35:18,682 - innolab - INFO - Error: error loading remote rules: loading rules failed: Get "https://github.com/Bearer/bearer-rules/releases/download/v0.48.2/javascript.tar.gz": tls: failed to verify certificate: x509: certificate signed by unknown authority
+2025-08-27 09:35:19,133 - innolab - ERROR - Command failed with return code 1
+2025-08-27 09:35:19,135 - innolab - ERROR - Bearer Docker scan failed
+2025-08-27 09:35:19,135 - innolab - ERROR - Bearer scan output: Analyzing codebase
+Error: error loading remote rules: loading rules failed: Get "https://github.com/Bearer/bearer-rules/releases/download/v0.48.2/javascript.tar.gz": tls: failed to verify certificate: x509: certificate signed by unknown authority
+
+2025-08-27 09:35:19,135 - innolab - ERROR - Bearer scan failed to produce results file
+2025-08-27 09:35:19,135 - innolab - INFO - Please ensure Bearer CLI is installed or Docker is available
+2025-08-27 09:35:19,136 - innolab - INFO - Install Bearer: https://docs.bearer.com/guides/installation/
+2025-08-27 09:35:19,136 - innolab - INFO - BEARER scanner found 0 bugs
+2025-08-27 09:35:19,136 - innolab - INFO - Iteration 1: Found 0 open bugs (0 BUG, 0 CODE_SMELL) across scanners: BEARER
+2025-08-27 09:35:19,137 - innolab - INFO - No bugs found - execution completed successfully
+2025-08-27 09:35:19,137 - innolab - INFO - === EXECUTION RESULT ===
+2025-08-27 09:35:19,138 - innolab - INFO - Mode: LOCAL
+2025-08-27 09:35:19,138 - innolab - INFO - Project: my-service
+2025-08-27 09:35:19,138 - innolab - INFO - Total bugs fixed: 0
+2025-08-27 09:35:19,138 - innolab - INFO - Total iterations: 1
+2025-08-27 09:35:19,139 - innolab - INFO - Start time: 2025-08-27T09:35:07.396203
+2025-08-27 09:35:19,139 - innolab - INFO - End time: 2025-08-27T09:35:19.137539
+2025-08-27 09:35:19,139 - innolab - INFO - Iteration 1: 0 bugs found, 0 fixed

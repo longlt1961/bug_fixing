@@ -1,0 +1,284 @@
+2025-08-27 11:19:31,861 - innolab - INFO - ExecutionServiceNoMongo initialized with:
+2025-08-27 11:19:31,861 - innolab - INFO -   Max iterations: 5
+2025-08-27 11:19:31,862 - innolab - INFO -   Project key: my-service
+2025-08-27 11:19:31,862 - innolab - INFO -   Source code path: c:\Users\HieuLT\Desktop\InnoLab\projects
+2025-08-27 11:19:31,862 - innolab - INFO -   Scan directory: Flask_App
+2025-08-27 11:19:31,862 - innolab - INFO -   Scan mode: ['bearer']
+2025-08-27 11:19:31,862 - innolab - INFO -   Fix mode: ['llm']
+2025-08-27 11:19:31,863 - innolab - INFO -   RAG available: True
+2025-08-27 11:19:31,863 - innolab - INFO - Starting execution with RAG (mode: DifyMode.LOCAL)
+2025-08-27 11:19:31,864 - innolab - INFO - 
+=== ITERATION 1/5 ===
+2025-08-27 11:19:31,864 - innolab - INFO - Starting Bearer scan for project: my-service
+2025-08-27 11:19:31,864 - innolab - INFO - Scanning directory: c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App
+2025-08-27 11:19:31,866 - innolab - ERROR - Command not found: bearer
+2025-08-27 11:19:31,866 - innolab - INFO - Using Bearer Docker image
+2025-08-27 11:19:31,866 - innolab - INFO - Running Bearer Docker scan: docker run --rm -v c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App:/scan -v c:\Users\HieuLT\Desktop\InnoLab\projects\SonarQ\bearer_results:/output bearer/bearer:latest scan /scan --format json --output /output/bearer_results_my-service.json --quiet --skip-path node_modules,*.git,__pycache__,.venv,venv,dist,build
+2025-08-27 11:19:32,898 - innolab - INFO - Analyzing codebase
+2025-08-27 11:19:40,071 - innolab - ERROR - Command failed with return code 1
+2025-08-27 11:19:40,072 - innolab - INFO - Bearer Docker scan completed successfully
+2025-08-27 11:19:40,072 - innolab - INFO - Reading Bearer scan results from: c:\Users\HieuLT\Desktop\InnoLab\projects\SonarQ\bearer_results\bearer_results_my-service.json
+2025-08-27 11:19:40,072 - innolab - INFO - Bearer scan results loaded successfully
+2025-08-27 11:19:40,073 - innolab - INFO - Found 5 Bearer security issues
+2025-08-27 11:19:40,073 - innolab - INFO - BEARER scanner found 5 bugs
+2025-08-27 11:19:40,074 - innolab - INFO - Iteration 1: Found 5 open bugs (0 BUG, 0 CODE_SMELL) across scanners: BEARER
+2025-08-27 11:19:40,074 - innolab - ERROR - Scan directory not found: C:\Users\HieuLT\Desktop\InnoLab\Flask_App
+2025-08-27 11:19:40,074 - innolab - INFO - Need to fix 5 bugs using Dify
+2025-08-27 11:19:40,075 - innolab - INFO - Running workflow with Dify API: app-21rA0wUAaR7PKPdmCX2WJxMo
+2025-08-27 11:19:40,075 - innolab - INFO - User: hieult
+2025-08-27 11:19:40,075 - innolab - INFO - Mode: DifyMode.LOCAL
+2025-08-27 11:19:40,075 - innolab - INFO - Base URL: http://localhost:5001/v1
+2025-08-27 11:19:40,076 - innolab - INFO - Generating Dify headers for api_key: app-21...
+2025-08-27 11:19:40,076 - innolab - INFO - POST http://localhost:5001/v1/workflows/run with payload: {'inputs': {'is_use_rag': 'True', 'src': '', 'report': '[{"key": "bearer_python_lang_avoid_pickle_3d8bc9945ac20db0da36e3db83cdb41a_0", "rule": "python_lang_avoid_pickle", "severity": "BLOCKER", "component": "owasp_insecure_demo.py", "line": 126, "message": "Usage of unsafe Pickle libraries. ## Description\\n\\nUsing pickle, _pickle and cPickle can make your application vulnerable to unsafe code execution. This is because the deserialization logic of these libraries allows for arbitrary code ...", "status": "OPEN", "type": "VULNERABILITY", "effort": "15min", "debt": "15min", "tags": ["security", "bearer", "critical", "security", "medium", "cwe-502"], "creationDate": "2025-08-27T11:19:40.073347", "updateDate": "2025-08-27T11:19:40.073355", "textRange": {"startLine": 126, "endLine": 126, "startOffset": 15, "endOffset": 33}}, {"key": "bearer_python_lang_ssl_verification_75c7b3a22c569565d6a6ddca3576a54f_0", "rule": "python_lang_ssl_verification", "severity": "CRITICAL", "component": "owasp_insecure_demo.py", "line": 135, "message": "Missing SSL certificate verification. ## Description\\n\\nMissing or optional SSL certificate verification can compromise the security of sensitive data. This vulnerability arises when an application fails to check for valid SSL certificates ...", "status": "OPEN", "type": "VULNERABILITY", "effort": "15min", "debt": "15min", "tags": ["security", "bearer", "high", "security", "medium", "cwe-295"], "creationDate": "2025-08-27T11:19:40.073404", "updateDate": "2025-08-27T11:19:40.073407", "textRange": {"startLine": 135, "endLine": 135, "startOffset": 13, "endOffset": 55}}, {"key": "bearer_python_lang_weak_hash_md5_067dd1abb0e02d41f260b99c894ed303_0", "rule": "python_lang_weak_hash_md5", "severity": "MAJOR", "component": "owasp_insecure_demo.py", "line": 21, "message": "Usage of weak hashing library (MDx). ## Description\\n\\nUsing a weak hashing library, such as MD5, increases the risk of data breaches. MD5 itself is vulnerable to collision attacks, where two different inputs can produce the same hash valu...", "status": "OPEN", "type": "VULNERABILITY", "effort": "10min", "debt": "10min", "tags": ["security", "bearer", "medium", "security", "medium", "cwe-328"], "creationDate": "2025-08-27T11:19:40.073443", "updateDate": "2025-08-27T11:19:40.073445", "textRange": {"startLine": 21, "endLine": 21, "startOffset": 18, "endOffset": 42}}, {"key": "bearer_python_lang_weak_hash_md5_067dd1abb0e02d41f260b99c894ed303_1", "rule": "python_lang_weak_hash_md5", "severity": "MAJOR", "component": "owasp_insecure_demo.py", "line": 49, "message": "Usage of weak hashing library (MDx). ## Description\\n\\nUsing a weak hashing library, such as MD5, increases the risk of data breaches. MD5 itself is vulnerable to collision attacks, where two different inputs can produce the same hash valu...", "status": "OPEN", "type": "VULNERABILITY", "effort": "10min", "debt": "10min", "tags": ["security", "bearer", "medium", "security", "medium", "cwe-328"], "creationDate": "2025-08-27T11:19:40.073469", "updateDate": "2025-08-27T11:19:40.073471", "textRange": {"startLine": 49, "endLine": 49, "startOffset": 14, "endOffset": 44}}, {"key": "bearer_python_lang_weak_hash_md5_067dd1abb0e02d41f260b99c894ed303_2", "rule": "python_lang_weak_hash_md5", "severity": "MAJOR", "component": "owasp_insecure_demo.py", "line": 62, "message": "Usage of weak hashing library (MDx). ## Description\\n\\nUsing a weak hashing library, such as MD5, increases the risk of data breaches. MD5 itself is vulnerable to collision attacks, where two different inputs can produce the same hash valu...", "status": "OPEN", "type": "VULNERABILITY", "effort": "10min", "debt": "10min", "tags": ["security", "bearer", "medium", "security", "medium", "cwe-328"], "creationDate": "2025-08-27T11:19:40.073496", "updateDate": "2025-08-27T11:19:40.073498", "textRange": {"startLine": 62, "endLine": 62, "startOffset": 14, "endOffset": 44}}]'}, 'user': 'hieult', 'response_mode': 'blocking'}
+2025-08-27 11:19:52,521 - innolab - INFO - Dify workflow run response status: 200
+2025-08-27 11:19:52,522 - innolab - INFO - Dify workflow run response: {"task_id": "1974e00a-5683-47fb-9827-cc242ac29ece", "workflow_run_id": "df86eec7-39c3-47bd-aa3b-d7e0574c4dc1", "data": {"id": "df86eec7-39c3-47bd-aa3b-d7e0574c4dc1", "workflow_id": "1ab32356-d6d5-4b3b-924e-5a66bb39ab5b", "status": "succeeded", "outputs": {"list_bugs": {"bugs": [{"action": "Fix", "bug_id": "bearer_python_lang_avoid_pickle_3d8bc9945ac20db0da36e3db83cdb41a_0", "classification": "True Positive", "reason": "The issue is a vulnerability related to the usage of unsafe Pickle libraries. RAG data is unavailable.", "rule_description": "Usage of unsafe Pickle libraries. ## Description\n\nUsing pickle, _pickle and cPickle can make your application vulnerable to unsafe code execution. This is because the deserialization logic of these libraries allows for arbitrary code ...", "rule_key": "python_lang_avoid_pickle", "type": "vulnerability"}, {"action": "Fix", "bug_id": "bearer_python_lang_ssl_verification_75c7b3a22c569565d6a6ddca3576a54f_0", "classification": "True Positive", "reason": "The issue is a vulnerability related to missing SSL certificate verification. RAG data is unavailable.", "rule_description": "Missing SSL certificate verification. ## Description\n\nMissing or optional SSL certificate verification can compromise the security of sensitive data. This vulnerability arises when an application fails to check for valid SSL certificates ...", "rule_key": "python_lang_ssl_verification", "type": "vulnerability"}, {"action": "Fix", "bug_id": "bearer_python_lang_weak_hash_md5_067dd1abb0e02d41f260b99c894ed303_0", "classification": "True Positive", "reason": "The issue is a vulnerability related to the usage of a weak hashing library (MD5). RAG data is unavailable.", "rule_description": "Usage of weak hashing library (MDx). ## Description\n\nUsing a weak hashing library, such as MD5, increases the risk of data breaches. MD5 itself is vulnerable to collision attacks, where two different inputs can produce the same hash valu...", "rule_key": "python_lang_weak_hash_md5", "type": "vulnerability"}, {"action": "Fix", "bug_id": "bearer_python_lang_weak_hash_md5_067dd1abb0e02d41f260b99c894ed303_1", "classification": "True Positive", "reason": "The issue is a vulnerability related to the usage of a weak hashing library (MD5). RAG data is unavailable.", "rule_description": "Usage of weak hashing library (MDx). ## Description\n\nUsing a weak hashing library, such as MD5, increases the risk of data breaches. MD5 itself is vulnerable to collision attacks, where two different inputs can produce the same hash valu...", "rule_key": "python_lang_weak_hash_md5", "type": "vulnerability"}, {"action": "Fix", "bug_id": "bearer_python_lang_weak_hash_md5_067dd1abb0e02d41f260b99c894ed303_2", "classification": "True Positive", "reason": "The issue is a vulnerability related to the usage of a weak hashing library (MD5). RAG data is unavailable.", "rule_description": "Usage of weak hashing library (MDx). ## Description\n\nUsing a weak hashing library, such as MD5, increases the risk of data breaches. MD5 itself is vulnerable to collision attacks, where two different inputs can produce the same hash valu...", "rule_key": "python_lang_weak_hash_md5", "type": "vulnerability"}], "bugs_to_fix": 5}, "bugs_to_fix": "{\n  \"bugs\": [\n    {\n      \"action\": \"Fix\",\n      \"bug_id\": \"bearer_python_lang_avoid_pickle_3d8bc9945ac20db0da36e3db83cdb41a_0\",\n      \"classification\": \"True Positive\",\n      \"reason\": \"The issue is a vulnerability related to the usage of unsafe Pickle libraries. RAG data is unavailable.\",\n      \"rule_description\": \"Usage of unsafe Pickle libraries. ## Description\\n\\nUsing pickle, _pickle and cPickle can make your application vulnerable to unsafe code execution. This is because the deserialization logic of these libraries allows for arbitrary code ...\",\n      \"rule_key\": \"python_lang_avoid_pickle\",\n      \"type\": \"vulnerability\"\n    },\n    {\n      \"action\": \"Fix\",\n      \"bug_id\": \"bearer_python_lang_ssl_verification_75c7b3a22c569565d6a6ddca3576a54f_0\",\n      \"classification\": \"True Positive\",\n      \"reason\": \"The issue is a vulnerability related to missing SSL certificate verification. RAG data is unavailable.\",\n      \"rule_description\": \"Missing SSL certificate verification. ## Description\\n\\nMissing or optional SSL certificate verification can compromise the security of sensitive data. This vulnerability arises when an application fails to check for valid SSL certificates ...\",\n      \"rule_key\": \"python_lang_ssl_verification\",\n      \"type\": \"vulnerability\"\n    },\n    {\n      \"action\": \"Fix\",\n      \"bug_id\": \"bearer_python_lang_weak_hash_md5_067dd1abb0e02d41f260b99c894ed303_0\",\n      \"classification\": \"True Positive\",\n      \"reason\": \"The issue is a vulnerability related to the usage of a weak hashing library (MD5). RAG data is unavailable.\",\n      \"rule_description\": \"Usage of weak hashing library (MDx). ## Description\\n\\nUsing a weak hashing library, such as MD5, increases the risk of data breaches. MD5 itself is vulnerable to collision attacks, where two different inputs can produce the same hash valu...\",\n      \"rule_key\": \"python_lang_weak_hash_md5\",\n      \"type\": \"vulnerability\"\n    },\n    {\n      \"action\": \"Fix\",\n      \"bug_id\": \"bearer_python_lang_weak_hash_md5_067dd1abb0e02d41f260b99c894ed303_1\",\n      \"classification\": \"True Positive\",\n      \"reason\": \"The issue is a vulnerability related to the usage of a weak hashing library (MD5). RAG data is unavailable.\",\n      \"rule_description\": \"Usage of weak hashing library (MDx). ## Description\\n\\nUsing a weak hashing library, such as MD5, increases the risk of data breaches. MD5 itself is vulnerable to collision attacks, where two different inputs can produce the same hash valu...\",\n      \"rule_key\": \"python_lang_weak_hash_md5\",\n      \"type\": \"vulnerability\"\n    },\n    {\n      \"action\": \"Fix\",\n      \"bug_id\": \"bearer_python_lang_weak_hash_md5_067dd1abb0e02d41f260b99c894ed303_2\",\n      \"classification\": \"True Positive\",\n      \"reason\": \"The issue is a vulnerability related to the usage of a weak hashing library (MD5). RAG data is unavailable.\",\n      \"rule_description\": \"Usage of weak hashing library (MDx). ## Description\\n\\nUsing a weak hashing library, such as MD5, increases the risk of data breaches. MD5 itself is vulnerable to collision attacks, where two different inputs can produce the same hash valu...\",\n      \"rule_key\": \"python_lang_weak_hash_md5\",\n      \"type\": \"vulnerability\"\n    }\n  ],\n  \"bugs_to_fix\": 5\n}"}, "error": "", "elapsed_time": 12.368245, "total_tokens": 8246, "total_steps": 6, "created_at": 1756268380, "finished_at": 1756268392}}
+2025-08-27 11:19:52,523 - innolab - INFO - DIFY: list_bugs type: <class 'dict'>, content: {'bugs': [{'action': 'Fix', 'bug_id': 'bearer_python_lang_avoid_pickle_3d8bc9945ac20db0da36e3db83cdb41a_0', 'classification': 'True Positive', 'reason': 'The issue is a vulnerability related to the usage of unsafe Pickle libraries. RAG data is unavailable.', 'rule_description': 'Usage of unsafe Pickle libraries. ## Description\n\nUsing pickle, _pickle and cPickle can make your application vulnerable to unsafe code execution. This is because the deserialization logic of these libraries allows for arbitrary code ...', 'rule_key': 'python_lang_avoid_pickle', 'type': 'vulnerability'}, {'action': 'Fix', 'bug_id': 'bearer_python_lang_ssl_verification_75c7b3a22c569565d6a6ddca3576a54f_0', 'classification': 'True Positive', 'reason': 'The issue is a vulnerability related to missing SSL certificate verification. RAG data is unavailable.', 'rule_description': 'Missing SSL certificate verification. ## Description\n\nMissing or optional SSL certificate verification can compromise the security of sensitive data. This vulnerability arises when an application fails to check for valid SSL certificates ...', 'rule_key': 'python_lang_ssl_verification', 'type': 'vulnerability'}, {'action': 'Fix', 'bug_id': 'bearer_python_lang_weak_hash_md5_067dd1abb0e02d41f260b99c894ed303_0', 'classification': 'True Positive', 'reason': 'The issue is a vulnerability related to the usage of a weak hashing library (MD5). RAG data is unavailable.', 'rule_description': 'Usage of weak hashing library (MDx). ## Description\n\nUsing a weak hashing library, such as MD5, increases the risk of data breaches. MD5 itself is vulnerable to collision attacks, where two different inputs can produce the same hash valu...', 'rule_key': 'python_lang_weak_hash_md5', 'type': 'vulnerability'}, {'action': 'Fix', 'bug_id': 'bearer_python_lang_weak_hash_md5_067dd1abb0e02d41f260b99c894ed303_1', 'classification': 'True Positive', 'reason': 'The issue is a vulnerability related to the usage of a weak hashing library (MD5). RAG data is unavailable.', 'rule_description': 'Usage of weak hashing library (MDx). ## Description\n\nUsing a weak hashing library, such as MD5, increases the risk of data breaches. MD5 itself is vulnerable to collision attacks, where two different inputs can produce the same hash valu...', 'rule_key': 'python_lang_weak_hash_md5', 'type': 'vulnerability'}, {'action': 'Fix', 'bug_id': 'bearer_python_lang_weak_hash_md5_067dd1abb0e02d41f260b99c894ed303_2', 'classification': 'True Positive', 'reason': 'The issue is a vulnerability related to the usage of a weak hashing library (MD5). RAG data is unavailable.', 'rule_description': 'Usage of weak hashing library (MDx). ## Description\n\nUsing a weak hashing library, such as MD5, increases the risk of data breaches. MD5 itself is vulnerable to collision attacks, where two different inputs can produce the same hash valu...', 'rule_key': 'python_lang_weak_hash_md5', 'type': 'vulnerability'}], 'bugs_to_fix': 5}
+2025-08-27 11:19:52,523 - innolab - INFO - DIFY: Initial bugs_to_fix from response: 5
+2025-08-27 11:19:52,523 - innolab - INFO - Starting fix_bugs for 2 bugs
+2025-08-27 11:19:52,524 - innolab - INFO - DEBUG: scan_directory = Flask_App
+2025-08-27 11:19:52,524 - innolab - INFO - DEBUG: innolab_root = c:\Users\HieuLT\Desktop\InnoLab\projects
+2025-08-27 11:19:52,525 - innolab - INFO - DEBUG: source_dir = c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App
+2025-08-27 11:19:52,525 - innolab - INFO - Fixing bugs in directory: c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App
+2025-08-27 11:19:52,526 - innolab - INFO - Created issues file: c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App\list_real_bugs.json with 2 bugs
+2025-08-27 11:19:52,527 - innolab - INFO - RAG integration enabled for bug fixing
+2025-08-27 11:19:52,527 - innolab - INFO - Running command: python C:\Users\HieuLT\Desktop\InnoLab\SonarQ\batch_fix.py c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App --fix --auto --issues-file list_real_bugs.json --enable-rag
+2025-08-27 11:20:16,390 - innolab - INFO - Enhanced Secure Batch Fix Script
+2025-08-27 11:20:16,391 - innolab - INFO - Advanced AI-powered code fixing with validation & safety checks
+2025-08-27 11:20:16,391 - innolab - INFO - ======================================================================
+2025-08-27 11:20:16,391 - innolab - INFO - FIXING Mode Enabled
+2025-08-27 11:20:16,391 - innolab - INFO - Fixing files in-place (overwriting originals)
+2025-08-27 11:20:16,391 - innolab - INFO - RAG Integration: Enabled - Fixed bugs will be stored in RAG system
+2025-08-27 11:20:16,391 - innolab - INFO - Issues file not found: list_real_bugs.json
+2025-08-27 11:20:16,391 - innolab - INFO - Template usage logging enabled: ./logs\template_usage_20250827_111954.log
+2025-08-27 11:20:16,391 - innolab - INFO - Scan Results:
+2025-08-27 11:20:16,391 - innolab - INFO - Directory: c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App
+2025-08-27 11:20:16,392 - innolab - INFO - Found 1 code files
+2025-08-27 11:20:16,392 - innolab - INFO - Files to process:
+2025-08-27 11:20:16,392 - innolab - INFO - 1. owasp_insecure_demo.py
+2025-08-27 11:20:16,392 - innolab - INFO - Auto mode: proceeding without confirmation
+2025-08-27 11:20:16,392 - innolab - INFO - ======================================================================
+2025-08-27 11:20:16,392 - innolab - INFO - Starting secure fixing...
+2025-08-27 11:20:16,392 - innolab - INFO - Template usage logging enabled: ./logs\template_usage_20250827_111954.log
+2025-08-27 11:20:16,392 - innolab - INFO - [1/1] Fixing: owasp_insecure_demo.py
+2025-08-27 11:20:16,393 - innolab - INFO - Failed: 'charmap' codec can't encode characters in position 2-3: character maps to <undefined>
+2025-08-27 11:20:16,393 - innolab - INFO - ======================================================================
+2025-08-27 11:20:16,393 - innolab - INFO - BATCH_FIX_RESULT: SUCCESS
+2025-08-27 11:20:16,393 - innolab - INFO - FIXED_FILES: 0
+2025-08-27 11:20:16,393 - innolab - INFO - FAILED_FILES: 1
+2025-08-27 11:20:16,393 - innolab - INFO - TOTAL_INPUT_TOKENS: 0
+2025-08-27 11:20:16,393 - innolab - INFO - TOTAL_OUTPUT_TOKENS: 0
+2025-08-27 11:20:16,393 - innolab - INFO - TOTAL_TOKENS: 0
+2025-08-27 11:20:16,394 - innolab - INFO - AVERAGE_SIMILARITY: 0.000
+2025-08-27 11:20:16,394 - innolab - INFO - THRESHOLD_MET_COUNT: 0
+2025-08-27 11:20:16,394 - innolab - INFO - SIMILARITY_THRESHOLD: 0.85
+2025-08-27 11:20:16,394 - innolab - INFO - DETAILED_RESULTS:
+2025-08-27 11:20:16,394 - innolab - INFO - FILE: owasp_insecure_demo.py | STATUS: FAILED | SIMILARITY: 0.000 | INPUT_TOKENS: 0 | OUTPUT_TOKENS: 0 | TOTAL_TOKENS: 0 | THRESHOLD_MET: False
+2025-08-27 11:20:16,394 - innolab - INFO - AVERAGE_PROCESSING_TIME: 22.3
+2025-08-27 11:20:16,394 - innolab - INFO - END_BATCH_RESULT
+2025-08-27 11:20:16,394 - innolab - INFO - {"success": true, "fixed_count": 0, "failed_count": 1, "total_input_tokens": 0, "total_output_tokens": 0, "total_tokens": 0, "average_similarity": 0.0, "threshold_met_count": 0, "similarity_threshold": 0.85, "average_processing_time": 22.342071}
+2025-08-27 11:20:18,572 - innolab - INFO - Batch fix completed successfully. Fixed 0 files
+2025-08-27 11:20:18,573 - innolab - INFO - Token usage - Input: 0, Output: 0, Total: 0
+2025-08-27 11:20:18,573 - innolab - INFO - Average similarity: 0.000, Threshold met: 0
+2025-08-27 11:20:18,573 - innolab - INFO - Cleaned up temporary issues file: c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App\list_real_bugs.json
+2025-08-27 11:20:18,573 - innolab - INFO - Starting Bearer scan for project: my-service
+2025-08-27 11:20:18,574 - innolab - INFO - Removed existing Bearer results file: c:\Users\HieuLT\Desktop\InnoLab\projects\SonarQ\bearer_results\bearer_results_my-service.json
+2025-08-27 11:20:18,574 - innolab - INFO - Scanning directory: c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App
+2025-08-27 11:20:18,576 - innolab - ERROR - Command not found: bearer
+2025-08-27 11:20:18,576 - innolab - INFO - Using Bearer Docker image
+2025-08-27 11:20:18,576 - innolab - INFO - Running Bearer Docker scan: docker run --rm -v c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App:/scan -v c:\Users\HieuLT\Desktop\InnoLab\projects\SonarQ\bearer_results:/output bearer/bearer:latest scan /scan --format json --output /output/bearer_results_my-service.json --quiet --skip-path node_modules,*.git,__pycache__,.venv,venv,dist,build
+2025-08-27 11:20:19,575 - innolab - INFO - Analyzing codebase
+2025-08-27 11:20:25,400 - innolab - ERROR - Command failed with return code 1
+2025-08-27 11:20:25,400 - innolab - INFO - Bearer Docker scan completed successfully
+2025-08-27 11:20:25,400 - innolab - INFO - Reading Bearer scan results from: c:\Users\HieuLT\Desktop\InnoLab\projects\SonarQ\bearer_results\bearer_results_my-service.json
+2025-08-27 11:20:25,401 - innolab - INFO - Bearer scan results loaded successfully
+2025-08-27 11:20:25,401 - innolab - INFO - Found 2 Bearer security issues
+2025-08-27 11:20:25,401 - innolab - INFO - Rescan found 2 open bugs (0 BUG, 0 CODE_SMELL)
+2025-08-27 11:20:25,401 - innolab - INFO - Bugs reduced: 3 (from 5 to 2)
+2025-08-27 11:20:25,401 - innolab - INFO - Iteration 1 completed: 2 bugs remain after rescan
+2025-08-27 11:20:25,402 - innolab - INFO - 
+=== ITERATION 2/5 ===
+2025-08-27 11:20:25,402 - innolab - INFO - Starting Bearer scan for project: my-service
+2025-08-27 11:20:25,402 - innolab - INFO - Removed existing Bearer results file: c:\Users\HieuLT\Desktop\InnoLab\projects\SonarQ\bearer_results\bearer_results_my-service.json
+2025-08-27 11:20:25,403 - innolab - INFO - Scanning directory: c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App
+2025-08-27 11:20:25,404 - innolab - ERROR - Command not found: bearer
+2025-08-27 11:20:25,404 - innolab - INFO - Using Bearer Docker image
+2025-08-27 11:20:25,405 - innolab - INFO - Running Bearer Docker scan: docker run --rm -v c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App:/scan -v c:\Users\HieuLT\Desktop\InnoLab\projects\SonarQ\bearer_results:/output bearer/bearer:latest scan /scan --format json --output /output/bearer_results_my-service.json --quiet --skip-path node_modules,*.git,__pycache__,.venv,venv,dist,build
+2025-08-27 11:20:26,450 - innolab - INFO - Analyzing codebase
+2025-08-27 11:20:33,127 - innolab - ERROR - Command failed with return code 1
+2025-08-27 11:20:33,128 - innolab - INFO - Bearer Docker scan completed successfully
+2025-08-27 11:20:33,129 - innolab - INFO - Reading Bearer scan results from: c:\Users\HieuLT\Desktop\InnoLab\projects\SonarQ\bearer_results\bearer_results_my-service.json
+2025-08-27 11:20:33,131 - innolab - INFO - Bearer scan results loaded successfully
+2025-08-27 11:20:33,132 - innolab - INFO - Found 2 Bearer security issues
+2025-08-27 11:20:33,133 - innolab - INFO - BEARER scanner found 2 bugs
+2025-08-27 11:20:33,134 - innolab - INFO - Iteration 2: Found 2 open bugs (0 BUG, 0 CODE_SMELL) across scanners: BEARER
+2025-08-27 11:20:33,135 - innolab - ERROR - Scan directory not found: C:\Users\HieuLT\Desktop\InnoLab\Flask_App
+2025-08-27 11:20:33,137 - innolab - INFO - Need to fix 2 bugs using Dify
+2025-08-27 11:20:33,138 - innolab - INFO - Running workflow with Dify API: app-21rA0wUAaR7PKPdmCX2WJxMo
+2025-08-27 11:20:33,138 - innolab - INFO - User: hieult
+2025-08-27 11:20:33,139 - innolab - INFO - Mode: DifyMode.LOCAL
+2025-08-27 11:20:33,140 - innolab - INFO - Base URL: http://localhost:5001/v1
+2025-08-27 11:20:33,141 - innolab - INFO - Generating Dify headers for api_key: app-21...
+2025-08-27 11:20:33,142 - innolab - INFO - POST http://localhost:5001/v1/workflows/run with payload: {'inputs': {'is_use_rag': 'True', 'src': '', 'report': '[{"key": "bearer_python_lang_ssl_verification_75c7b3a22c569565d6a6ddca3576a54f_0", "rule": "python_lang_ssl_verification", "severity": "CRITICAL", "component": "owasp_insecure_demo.py", "line": 132, "message": "Missing SSL certificate verification. ## Description\\n\\nMissing or optional SSL certificate verification can compromise the security of sensitive data. This vulnerability arises when an application fails to check for valid SSL certificates ...", "status": "OPEN", "type": "VULNERABILITY", "effort": "15min", "debt": "15min", "tags": ["security", "bearer", "high", "security", "medium", "cwe-295"], "creationDate": "2025-08-27T11:20:33.132654", "updateDate": "2025-08-27T11:20:33.132673", "textRange": {"startLine": 132, "endLine": 132, "startOffset": 13, "endOffset": 55}}, {"key": "bearer_python_lang_weak_hash_md5_067dd1abb0e02d41f260b99c894ed303_0", "rule": "python_lang_weak_hash_md5", "severity": "MAJOR", "component": "owasp_insecure_demo.py", "line": 72, "message": "Usage of weak hashing library (MDx). ## Description\\n\\nUsing a weak hashing library, such as MD5, increases the risk of data breaches. MD5 itself is vulnerable to collision attacks, where two different inputs can produce the same hash valu...", "status": "OPEN", "type": "VULNERABILITY", "effort": "10min", "debt": "10min", "tags": ["security", "bearer", "medium", "security", "medium", "cwe-328"], "creationDate": "2025-08-27T11:20:33.132753", "updateDate": "2025-08-27T11:20:33.132760", "textRange": {"startLine": 72, "endLine": 72, "startOffset": 14, "endOffset": 44}}]'}, 'user': 'hieult', 'response_mode': 'blocking'}
+2025-08-27 11:20:42,081 - innolab - INFO - Dify workflow run response status: 200
+2025-08-27 11:20:42,082 - innolab - INFO - Dify workflow run response: {"task_id": "4103b95a-e82d-417c-b863-f4333a7985f5", "workflow_run_id": "6b1c7f40-c206-4296-b27f-8f41dfdda259", "data": {"id": "6b1c7f40-c206-4296-b27f-8f41dfdda259", "workflow_id": "1ab32356-d6d5-4b3b-924e-5a66bb39ab5b", "status": "succeeded", "outputs": {"list_bugs": {"bugs": [{"action": "Fix", "bug_id": "bearer_python_lang_ssl_verification_75c7b3a22c569565d6a6ddca3576a54f_0", "classification": "True Positive", "reason": "The RAG context does not provide specific information about this issue. Missing SSL certificate verification is a vulnerability.", "rule_description": "Missing SSL certificate verification. ## Description\n\nMissing or optional SSL certificate verification can compromise the security of sensitive data. This vulnerability arises when an application fails to check for valid SSL certificates ...", "rule_key": "python_lang_ssl_verification", "type": "vulnerability"}, {"action": "Fix", "bug_id": "bearer_python_lang_weak_hash_md5_067dd1abb0e02d41f260b99c894ed303_0", "classification": "True Positive", "reason": "The RAG context does not provide specific information about this issue. Usage of weak hashing library (MDx) is a vulnerability.", "rule_description": "Usage of weak hashing library (MDx). ## Description\n\nUsing a weak hashing library, such as MD5, increases the risk of data breaches. MD5 itself is vulnerable to collision attacks, where two different inputs can produce the same hash valu...", "rule_key": "python_lang_weak_hash_md5", "type": "vulnerability"}], "bugs_to_fix": 2}, "bugs_to_fix": "{\n  \"bugs\": [\n    {\n      \"action\": \"Fix\",\n      \"bug_id\": \"bearer_python_lang_ssl_verification_75c7b3a22c569565d6a6ddca3576a54f_0\",\n      \"classification\": \"True Positive\",\n      \"reason\": \"The RAG context does not provide specific information about this issue. Missing SSL certificate verification is a vulnerability.\",\n      \"rule_description\": \"Missing SSL certificate verification. ## Description\\n\\nMissing or optional SSL certificate verification can compromise the security of sensitive data. This vulnerability arises when an application fails to check for valid SSL certificates ...\",\n      \"rule_key\": \"python_lang_ssl_verification\",\n      \"type\": \"vulnerability\"\n    },\n    {\n      \"action\": \"Fix\",\n      \"bug_id\": \"bearer_python_lang_weak_hash_md5_067dd1abb0e02d41f260b99c894ed303_0\",\n      \"classification\": \"True Positive\",\n      \"reason\": \"The RAG context does not provide specific information about this issue. Usage of weak hashing library (MDx) is a vulnerability.\",\n      \"rule_description\": \"Usage of weak hashing library (MDx). ## Description\\n\\nUsing a weak hashing library, such as MD5, increases the risk of data breaches. MD5 itself is vulnerable to collision attacks, where two different inputs can produce the same hash valu...\",\n      \"rule_key\": \"python_lang_weak_hash_md5\",\n      \"type\": \"vulnerability\"\n    }\n  ],\n  \"bugs_to_fix\": 2\n}"}, "error": "", "elapsed_time": 8.869322, "total_tokens": 12572, "total_steps": 6, "created_at": 1756268433, "finished_at": 1756268442}}
+2025-08-27 11:20:42,084 - innolab - INFO - DIFY: list_bugs type: <class 'dict'>, content: {'bugs': [{'action': 'Fix', 'bug_id': 'bearer_python_lang_ssl_verification_75c7b3a22c569565d6a6ddca3576a54f_0', 'classification': 'True Positive', 'reason': 'The RAG context does not provide specific information about this issue. Missing SSL certificate verification is a vulnerability.', 'rule_description': 'Missing SSL certificate verification. ## Description\n\nMissing or optional SSL certificate verification can compromise the security of sensitive data. This vulnerability arises when an application fails to check for valid SSL certificates ...', 'rule_key': 'python_lang_ssl_verification', 'type': 'vulnerability'}, {'action': 'Fix', 'bug_id': 'bearer_python_lang_weak_hash_md5_067dd1abb0e02d41f260b99c894ed303_0', 'classification': 'True Positive', 'reason': 'The RAG context does not provide specific information about this issue. Usage of weak hashing library (MDx) is a vulnerability.', 'rule_description': 'Usage of weak hashing library (MDx). ## Description\n\nUsing a weak hashing library, such as MD5, increases the risk of data breaches. MD5 itself is vulnerable to collision attacks, where two different inputs can produce the same hash valu...', 'rule_key': 'python_lang_weak_hash_md5', 'type': 'vulnerability'}], 'bugs_to_fix': 2}
+2025-08-27 11:20:42,085 - innolab - INFO - DIFY: Initial bugs_to_fix from response: 2
+2025-08-27 11:20:42,086 - innolab - INFO - Starting fix_bugs for 2 bugs
+2025-08-27 11:20:42,086 - innolab - INFO - DEBUG: scan_directory = Flask_App
+2025-08-27 11:20:42,087 - innolab - INFO - DEBUG: innolab_root = c:\Users\HieuLT\Desktop\InnoLab\projects
+2025-08-27 11:20:42,087 - innolab - INFO - DEBUG: source_dir = c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App
+2025-08-27 11:20:42,088 - innolab - INFO - Fixing bugs in directory: c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App
+2025-08-27 11:20:42,092 - innolab - INFO - Created issues file: c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App\list_real_bugs.json with 2 bugs
+2025-08-27 11:20:42,093 - innolab - INFO - RAG integration enabled for bug fixing
+2025-08-27 11:20:42,094 - innolab - INFO - Running command: python C:\Users\HieuLT\Desktop\InnoLab\SonarQ\batch_fix.py c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App --fix --auto --issues-file list_real_bugs.json --enable-rag
+2025-08-27 11:20:57,364 - innolab - INFO - Enhanced Secure Batch Fix Script
+2025-08-27 11:20:57,365 - innolab - INFO - Advanced AI-powered code fixing with validation & safety checks
+2025-08-27 11:20:57,365 - innolab - INFO - ======================================================================
+2025-08-27 11:20:57,366 - innolab - INFO - FIXING Mode Enabled
+2025-08-27 11:20:57,366 - innolab - INFO - Fixing files in-place (overwriting originals)
+2025-08-27 11:20:57,367 - innolab - INFO - RAG Integration: Enabled - Fixed bugs will be stored in RAG system
+2025-08-27 11:20:57,368 - innolab - INFO - Issues file not found: list_real_bugs.json
+2025-08-27 11:20:57,369 - innolab - INFO - Template usage logging enabled: ./logs\template_usage_20250827_112043.log
+2025-08-27 11:20:57,370 - innolab - INFO - Scan Results:
+2025-08-27 11:20:57,371 - innolab - INFO - Directory: c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App
+2025-08-27 11:20:57,372 - innolab - INFO - Found 1 code files
+2025-08-27 11:20:57,373 - innolab - INFO - Files to process:
+2025-08-27 11:20:57,373 - innolab - INFO - 1. owasp_insecure_demo.py
+2025-08-27 11:20:57,374 - innolab - INFO - Auto mode: proceeding without confirmation
+2025-08-27 11:20:57,375 - innolab - INFO - ======================================================================
+2025-08-27 11:20:57,376 - innolab - INFO - Starting secure fixing...
+2025-08-27 11:20:57,378 - innolab - INFO - Template usage logging enabled: ./logs\template_usage_20250827_112043.log
+2025-08-27 11:20:57,378 - innolab - INFO - [1/1] Fixing: owasp_insecure_demo.py
+2025-08-27 11:20:57,379 - innolab - INFO - Failed: 'charmap' codec can't encode characters in position 2-3: character maps to <undefined>
+2025-08-27 11:20:57,380 - innolab - INFO - ======================================================================
+2025-08-27 11:20:57,381 - innolab - INFO - BATCH_FIX_RESULT: SUCCESS
+2025-08-27 11:20:57,381 - innolab - INFO - FIXED_FILES: 0
+2025-08-27 11:20:57,381 - innolab - INFO - FAILED_FILES: 1
+2025-08-27 11:20:57,382 - innolab - INFO - TOTAL_INPUT_TOKENS: 0
+2025-08-27 11:20:57,382 - innolab - INFO - TOTAL_OUTPUT_TOKENS: 0
+2025-08-27 11:20:57,382 - innolab - INFO - TOTAL_TOKENS: 0
+2025-08-27 11:20:57,383 - innolab - INFO - AVERAGE_SIMILARITY: 0.000
+2025-08-27 11:20:57,383 - innolab - INFO - THRESHOLD_MET_COUNT: 0
+2025-08-27 11:20:57,384 - innolab - INFO - SIMILARITY_THRESHOLD: 0.85
+2025-08-27 11:20:57,385 - innolab - INFO - DETAILED_RESULTS:
+2025-08-27 11:20:57,385 - innolab - INFO - FILE: owasp_insecure_demo.py | STATUS: FAILED | SIMILARITY: 0.000 | INPUT_TOKENS: 0 | OUTPUT_TOKENS: 0 | TOTAL_TOKENS: 0 | THRESHOLD_MET: False
+2025-08-27 11:20:57,386 - innolab - INFO - AVERAGE_PROCESSING_TIME: 13.9
+2025-08-27 11:20:57,386 - innolab - INFO - END_BATCH_RESULT
+2025-08-27 11:20:57,387 - innolab - INFO - {"success": true, "fixed_count": 0, "failed_count": 1, "total_input_tokens": 0, "total_output_tokens": 0, "total_tokens": 0, "average_similarity": 0.0, "threshold_met_count": 0, "similarity_threshold": 0.85, "average_processing_time": 13.92658}
+2025-08-27 11:20:59,604 - innolab - INFO - Batch fix completed successfully. Fixed 0 files
+2025-08-27 11:20:59,604 - innolab - INFO - Token usage - Input: 0, Output: 0, Total: 0
+2025-08-27 11:20:59,604 - innolab - INFO - Average similarity: 0.000, Threshold met: 0
+2025-08-27 11:20:59,605 - innolab - INFO - Cleaned up temporary issues file: c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App\list_real_bugs.json
+2025-08-27 11:20:59,605 - innolab - INFO - Starting Bearer scan for project: my-service
+2025-08-27 11:20:59,606 - innolab - INFO - Removed existing Bearer results file: c:\Users\HieuLT\Desktop\InnoLab\projects\SonarQ\bearer_results\bearer_results_my-service.json
+2025-08-27 11:20:59,606 - innolab - INFO - Scanning directory: c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App
+2025-08-27 11:20:59,607 - innolab - ERROR - Command not found: bearer
+2025-08-27 11:20:59,608 - innolab - INFO - Using Bearer Docker image
+2025-08-27 11:20:59,608 - innolab - INFO - Running Bearer Docker scan: docker run --rm -v c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App:/scan -v c:\Users\HieuLT\Desktop\InnoLab\projects\SonarQ\bearer_results:/output bearer/bearer:latest scan /scan --format json --output /output/bearer_results_my-service.json --quiet --skip-path node_modules,*.git,__pycache__,.venv,venv,dist,build
+2025-08-27 11:21:00,589 - innolab - INFO - Analyzing codebase
+2025-08-27 11:21:06,976 - innolab - ERROR - Command failed with return code 1
+2025-08-27 11:21:06,978 - innolab - INFO - Bearer Docker scan completed successfully
+2025-08-27 11:21:06,979 - innolab - INFO - Reading Bearer scan results from: c:\Users\HieuLT\Desktop\InnoLab\projects\SonarQ\bearer_results\bearer_results_my-service.json
+2025-08-27 11:21:06,980 - innolab - INFO - Bearer scan results loaded successfully
+2025-08-27 11:21:06,980 - innolab - INFO - Found 1 Bearer security issues
+2025-08-27 11:21:06,981 - innolab - INFO - Rescan found 1 open bugs (0 BUG, 0 CODE_SMELL)
+2025-08-27 11:21:06,982 - innolab - INFO - Bugs reduced: 1 (from 2 to 1)
+2025-08-27 11:21:06,982 - innolab - INFO - Iteration 2 completed: 1 bugs remain after rescan
+2025-08-27 11:21:06,983 - innolab - INFO - 
+=== ITERATION 3/5 ===
+2025-08-27 11:21:06,984 - innolab - INFO - Starting Bearer scan for project: my-service
+2025-08-27 11:21:06,987 - innolab - INFO - Removed existing Bearer results file: c:\Users\HieuLT\Desktop\InnoLab\projects\SonarQ\bearer_results\bearer_results_my-service.json
+2025-08-27 11:21:06,988 - innolab - INFO - Scanning directory: c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App
+2025-08-27 11:21:06,993 - innolab - ERROR - Command not found: bearer
+2025-08-27 11:21:06,994 - innolab - INFO - Using Bearer Docker image
+2025-08-27 11:21:06,995 - innolab - INFO - Running Bearer Docker scan: docker run --rm -v c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App:/scan -v c:\Users\HieuLT\Desktop\InnoLab\projects\SonarQ\bearer_results:/output bearer/bearer:latest scan /scan --format json --output /output/bearer_results_my-service.json --quiet --skip-path node_modules,*.git,__pycache__,.venv,venv,dist,build
+2025-08-27 11:21:08,086 - innolab - INFO - Analyzing codebase
+2025-08-27 11:21:14,700 - innolab - ERROR - Command failed with return code 1
+2025-08-27 11:21:14,702 - innolab - INFO - Bearer Docker scan completed successfully
+2025-08-27 11:21:14,703 - innolab - INFO - Reading Bearer scan results from: c:\Users\HieuLT\Desktop\InnoLab\projects\SonarQ\bearer_results\bearer_results_my-service.json
+2025-08-27 11:21:14,704 - innolab - INFO - Bearer scan results loaded successfully
+2025-08-27 11:21:14,705 - innolab - INFO - Found 1 Bearer security issues
+2025-08-27 11:21:14,706 - innolab - INFO - BEARER scanner found 1 bugs
+2025-08-27 11:21:14,707 - innolab - INFO - Iteration 3: Found 1 open bugs (0 BUG, 0 CODE_SMELL) across scanners: BEARER
+2025-08-27 11:21:14,708 - innolab - ERROR - Scan directory not found: C:\Users\HieuLT\Desktop\InnoLab\Flask_App
+2025-08-27 11:21:14,708 - innolab - INFO - Need to fix 1 bugs using Dify
+2025-08-27 11:21:14,709 - innolab - INFO - Running workflow with Dify API: app-21rA0wUAaR7PKPdmCX2WJxMo
+2025-08-27 11:21:14,709 - innolab - INFO - User: hieult
+2025-08-27 11:21:14,710 - innolab - INFO - Mode: DifyMode.LOCAL
+2025-08-27 11:21:14,710 - innolab - INFO - Base URL: http://localhost:5001/v1
+2025-08-27 11:21:14,711 - innolab - INFO - Generating Dify headers for api_key: app-21...
+2025-08-27 11:21:14,712 - innolab - INFO - POST http://localhost:5001/v1/workflows/run with payload: {'inputs': {'is_use_rag': 'True', 'src': '', 'report': '[{"key": "bearer_python_lang_ssl_verification_75c7b3a22c569565d6a6ddca3576a54f_0", "rule": "python_lang_ssl_verification", "severity": "CRITICAL", "component": "owasp_insecure_demo.py", "line": 135, "message": "Missing SSL certificate verification. ## Description\\n\\nMissing or optional SSL certificate verification can compromise the security of sensitive data. This vulnerability arises when an application fails to check for valid SSL certificates ...", "status": "OPEN", "type": "VULNERABILITY", "effort": "15min", "debt": "15min", "tags": ["security", "bearer", "high", "security", "medium", "cwe-295"], "creationDate": "2025-08-27T11:21:14.705223", "updateDate": "2025-08-27T11:21:14.705237", "textRange": {"startLine": 135, "endLine": 135, "startOffset": 13, "endOffset": 55}}]'}, 'user': 'hieult', 'response_mode': 'blocking'}
+2025-08-27 11:21:22,310 - innolab - INFO - Dify workflow run response status: 200
+2025-08-27 11:21:22,311 - innolab - INFO - Dify workflow run response: {"task_id": "bb1e4059-f324-49c8-a514-52f367e39672", "workflow_run_id": "cc5a6e32-42fb-4790-ba9e-f928d8fafe09", "data": {"id": "cc5a6e32-42fb-4790-ba9e-f928d8fafe09", "workflow_id": "1ab32356-d6d5-4b3b-924e-5a66bb39ab5b", "status": "succeeded", "outputs": {"list_bugs": {"bugs": [{"action": "Fix", "bug_id": "bearer_python_lang_ssl_verification_75c7b3a22c569565d6a6ddca3576a54f_0", "classification": "True Positive", "reason": "The RAG context does not contain information about this specific issue. Missing SSL certificate verification is a security vulnerability and should be fixed.", "rule_description": "Missing SSL certificate verification. ## Description\n\nMissing or optional SSL certificate verification can compromise the security of sensitive data. This vulnerability arises when an application fails to check for valid SSL certificates ...", "rule_key": "python_lang_ssl_verification", "type": "vulnerability"}], "bugs_to_fix": 1}, "bugs_to_fix": "{\n  \"bugs\": [\n    {\n      \"action\": \"Fix\",\n      \"bug_id\": \"bearer_python_lang_ssl_verification_75c7b3a22c569565d6a6ddca3576a54f_0\",\n      \"classification\": \"True Positive\",\n      \"reason\": \"The RAG context does not contain information about this specific issue. Missing SSL certificate verification is a security vulnerability and should be fixed.\",\n      \"rule_description\": \"Missing SSL certificate verification. ## Description\\n\\nMissing or optional SSL certificate verification can compromise the security of sensitive data. This vulnerability arises when an application fails to check for valid SSL certificates ...\",\n      \"rule_key\": \"python_lang_ssl_verification\",\n      \"type\": \"vulnerability\"\n    }\n  ],\n  \"bugs_to_fix\": 1\n}"}, "error": "", "elapsed_time": 7.540216, "total_tokens": 11407, "total_steps": 6, "created_at": 1756268474, "finished_at": 1756268482}}
+2025-08-27 11:21:22,311 - innolab - INFO - DIFY: list_bugs type: <class 'dict'>, content: {'bugs': [{'action': 'Fix', 'bug_id': 'bearer_python_lang_ssl_verification_75c7b3a22c569565d6a6ddca3576a54f_0', 'classification': 'True Positive', 'reason': 'The RAG context does not contain information about this specific issue. Missing SSL certificate verification is a security vulnerability and should be fixed.', 'rule_description': 'Missing SSL certificate verification. ## Description\n\nMissing or optional SSL certificate verification can compromise the security of sensitive data. This vulnerability arises when an application fails to check for valid SSL certificates ...', 'rule_key': 'python_lang_ssl_verification', 'type': 'vulnerability'}], 'bugs_to_fix': 1}
+2025-08-27 11:21:22,312 - innolab - INFO - DIFY: Initial bugs_to_fix from response: 1
+2025-08-27 11:21:22,312 - innolab - INFO - Starting fix_bugs for 2 bugs
+2025-08-27 11:21:22,312 - innolab - INFO - DEBUG: scan_directory = Flask_App
+2025-08-27 11:21:22,313 - innolab - INFO - DEBUG: innolab_root = c:\Users\HieuLT\Desktop\InnoLab\projects
+2025-08-27 11:21:22,313 - innolab - INFO - DEBUG: source_dir = c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App
+2025-08-27 11:21:22,313 - innolab - INFO - Fixing bugs in directory: c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App
+2025-08-27 11:21:22,314 - innolab - INFO - Created issues file: c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App\list_real_bugs.json with 2 bugs
+2025-08-27 11:21:22,314 - innolab - INFO - RAG integration enabled for bug fixing
+2025-08-27 11:21:22,314 - innolab - INFO - Running command: python C:\Users\HieuLT\Desktop\InnoLab\SonarQ\batch_fix.py c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App --fix --auto --issues-file list_real_bugs.json --enable-rag
+2025-08-27 11:21:43,631 - innolab - INFO - Enhanced Secure Batch Fix Script
+2025-08-27 11:21:43,632 - innolab - INFO - Advanced AI-powered code fixing with validation & safety checks
+2025-08-27 11:21:43,632 - innolab - INFO - ======================================================================
+2025-08-27 11:21:43,632 - innolab - INFO - FIXING Mode Enabled
+2025-08-27 11:21:43,632 - innolab - INFO - Fixing files in-place (overwriting originals)
+2025-08-27 11:21:43,632 - innolab - INFO - RAG Integration: Enabled - Fixed bugs will be stored in RAG system
+2025-08-27 11:21:43,632 - innolab - INFO - Issues file not found: list_real_bugs.json
+2025-08-27 11:21:43,633 - innolab - INFO - Template usage logging enabled: ./logs\template_usage_20250827_112123.log
+2025-08-27 11:21:43,633 - innolab - INFO - Scan Results:
+2025-08-27 11:21:43,633 - innolab - INFO - Directory: c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App
+2025-08-27 11:21:43,633 - innolab - INFO - Found 1 code files
+2025-08-27 11:21:43,633 - innolab - INFO - Files to process:
+2025-08-27 11:21:43,633 - innolab - INFO - 1. owasp_insecure_demo.py
+2025-08-27 11:21:43,633 - innolab - INFO - Auto mode: proceeding without confirmation
+2025-08-27 11:21:43,634 - innolab - INFO - ======================================================================
+2025-08-27 11:21:43,634 - innolab - INFO - Starting secure fixing...
+2025-08-27 11:21:43,634 - innolab - INFO - Template usage logging enabled: ./logs\template_usage_20250827_112123.log
+2025-08-27 11:21:43,634 - innolab - INFO - [1/1] Fixing: owasp_insecure_demo.py
+2025-08-27 11:21:43,634 - innolab - INFO - Failed: 'charmap' codec can't encode characters in position 2-3: character maps to <undefined>
+2025-08-27 11:21:43,635 - innolab - INFO - ======================================================================
+2025-08-27 11:21:43,635 - innolab - INFO - BATCH_FIX_RESULT: SUCCESS
+2025-08-27 11:21:43,635 - innolab - INFO - FIXED_FILES: 0
+2025-08-27 11:21:43,636 - innolab - INFO - FAILED_FILES: 1
+2025-08-27 11:21:43,637 - innolab - INFO - TOTAL_INPUT_TOKENS: 0
+2025-08-27 11:21:43,637 - innolab - INFO - TOTAL_OUTPUT_TOKENS: 0
+2025-08-27 11:21:43,638 - innolab - INFO - TOTAL_TOKENS: 0
+2025-08-27 11:21:43,638 - innolab - INFO - AVERAGE_SIMILARITY: 0.000
+2025-08-27 11:21:43,639 - innolab - INFO - THRESHOLD_MET_COUNT: 0
+2025-08-27 11:21:43,639 - innolab - INFO - SIMILARITY_THRESHOLD: 0.85
+2025-08-27 11:21:43,640 - innolab - INFO - DETAILED_RESULTS:
+2025-08-27 11:21:43,640 - innolab - INFO - FILE: owasp_insecure_demo.py | STATUS: FAILED | SIMILARITY: 0.000 | INPUT_TOKENS: 0 | OUTPUT_TOKENS: 0 | TOTAL_TOKENS: 0 | THRESHOLD_MET: False
+2025-08-27 11:21:43,641 - innolab - INFO - AVERAGE_PROCESSING_TIME: 20.0
+2025-08-27 11:21:43,642 - innolab - INFO - END_BATCH_RESULT
+2025-08-27 11:21:43,642 - innolab - INFO - {"success": true, "fixed_count": 0, "failed_count": 1, "total_input_tokens": 0, "total_output_tokens": 0, "total_tokens": 0, "average_similarity": 0.0, "threshold_met_count": 0, "similarity_threshold": 0.85, "average_processing_time": 19.963985}
+2025-08-27 11:21:45,852 - innolab - INFO - Batch fix completed successfully. Fixed 0 files
+2025-08-27 11:21:45,852 - innolab - INFO - Token usage - Input: 0, Output: 0, Total: 0
+2025-08-27 11:21:45,853 - innolab - INFO - Average similarity: 0.000, Threshold met: 0
+2025-08-27 11:21:45,853 - innolab - INFO - Cleaned up temporary issues file: c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App\list_real_bugs.json
+2025-08-27 11:21:45,854 - innolab - INFO - Starting Bearer scan for project: my-service
+2025-08-27 11:21:45,854 - innolab - INFO - Removed existing Bearer results file: c:\Users\HieuLT\Desktop\InnoLab\projects\SonarQ\bearer_results\bearer_results_my-service.json
+2025-08-27 11:21:45,855 - innolab - INFO - Scanning directory: c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App
+2025-08-27 11:21:45,856 - innolab - ERROR - Command not found: bearer
+2025-08-27 11:21:45,857 - innolab - INFO - Using Bearer Docker image
+2025-08-27 11:21:45,857 - innolab - INFO - Running Bearer Docker scan: docker run --rm -v c:\Users\HieuLT\Desktop\InnoLab\projects\Flask_App:/scan -v c:\Users\HieuLT\Desktop\InnoLab\projects\SonarQ\bearer_results:/output bearer/bearer:latest scan /scan --format json --output /output/bearer_results_my-service.json --quiet --skip-path node_modules,*.git,__pycache__,.venv,venv,dist,build
+2025-08-27 11:21:46,905 - innolab - INFO - Analyzing codebase
+2025-08-27 11:21:53,788 - innolab - INFO - Bearer Docker scan completed successfully
+2025-08-27 11:21:53,789 - innolab - INFO - Reading Bearer scan results from: c:\Users\HieuLT\Desktop\InnoLab\projects\SonarQ\bearer_results\bearer_results_my-service.json
+2025-08-27 11:21:53,790 - innolab - INFO - Bearer scan results loaded successfully
+2025-08-27 11:21:53,790 - innolab - INFO - Found 0 Bearer security issues
+2025-08-27 11:21:53,790 - innolab - INFO - Rescan found 0 open bugs (0 BUG, 0 CODE_SMELL)
+2025-08-27 11:21:53,791 - innolab - INFO - Bugs reduced: 1 (from 1 to 0)
+2025-08-27 11:21:53,791 - innolab - INFO - Iteration 3 completed: all bugs resolved after rescan
+2025-08-27 11:21:53,792 - innolab - INFO - === EXECUTION RESULT ===
+2025-08-27 11:21:53,792 - innolab - INFO - Mode: LOCAL_with_rag
+2025-08-27 11:21:53,792 - innolab - INFO - Project: my-service
+2025-08-27 11:21:53,793 - innolab - INFO - Total bugs fixed: 0
+2025-08-27 11:21:53,793 - innolab - INFO - Total iterations: 3
+2025-08-27 11:21:53,793 - innolab - INFO - Start time: 2025-08-27T11:19:31.863744
+2025-08-27 11:21:53,794 - innolab - INFO - End time: 2025-08-27T11:21:53.791978
+2025-08-27 11:21:53,794 - innolab - INFO - Iteration 1: 5 bugs found, 0 fixed
+2025-08-27 11:21:53,794 - innolab - INFO - Iteration 2: 2 bugs found, 0 fixed
+2025-08-27 11:21:53,794 - innolab - INFO - Iteration 3: 1 bugs found, 0 fixed

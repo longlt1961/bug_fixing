@@ -196,7 +196,13 @@ class SecureFixProcessor:
         
         return genai.GenerativeModel(
             'gemini-2.0-flash',
-            safety_settings=safety_settings
+            safety_settings=safety_settings,
+            generation_config=genai.types.GenerationConfig(
+                temperature=0.1,  # Có thể điều chỉnh từ 0.0 đến 1.0
+                top_p=0.8,
+                top_k=40,
+                max_output_tokens=8192
+            )
         )
     
     def _create_backup_dir(self):
@@ -548,7 +554,7 @@ class SecureFixProcessor:
                         fixed_code=fixed_code
                     )
                 except Exception as rag_error:
-                    print(f"  ⚠️ Warning: Failed to add to RAG system: {str(rag_error)}")
+                    print(f"  Warning: Failed to add to RAG system: {str(rag_error)}")
             
             return fix_result
             
@@ -684,7 +690,7 @@ Chỉ trả về code đã sửa, không cần markdown formatting hay giải th
             search_result = self.rag_service.search_rag_knowledge(issues_data, limit=3)
             
             if search_result.success and search_result.sources:
-                print(f"  🔍 Found {len(search_result.sources)} similar fixes in RAG")
+                print(f"  Found {len(search_result.sources)} similar fixes in RAG")
                 
                 # Get RAG context for prompt enhancement
                 rag_context = self.rag_service.get_rag_context_for_prompt(issues_data)
@@ -693,7 +699,7 @@ Chỉ trả về code đã sửa, không cần markdown formatting hay giải th
             return None
             
         except Exception as e:
-            print(f"  ⚠️ Warning: RAG search failed: {str(e)}")
+            print(f"  Warning: RAG search failed: {str(e)}")
             return None
     
     def add_bug_to_rag(self, fix_result: FixResult, issues_data: List[Dict] = None, 
@@ -776,14 +782,14 @@ Chỉ trả về code đã sửa, không cần markdown formatting hay giải th
             result = self.rag_service.add_fix_to_rag(fix_context, issues_data, raw_response, fixed_code)
             
             if result.success:
-                print(f"  ✅ Successfully added bug fix to RAG: {os.path.basename(fix_result.file_path)}")
+                print(f"  Successfully added bug fix to RAG: {os.path.basename(fix_result.file_path)}")
                 return True
             else:
-                print(f"  ❌ Failed to add to RAG: {result.error_message}")
+                print(f"  Failed to add to RAG: {result.error_message}")
                 return False
                 
         except Exception as e:
-            print(f"  ❌ Error adding to RAG: {str(e)}")
+            print(f"  Error adding to RAG: {str(e)}")
             return False
     
     def load_issues_from_file(self, issues_file_path: str) -> Dict[str, List[Dict]]:
@@ -1117,7 +1123,13 @@ def main():
         summary["average_processing_time"] = avg_time
 
     print("\nEND_BATCH_RESULT")
-    print(json.dumps(summary))
+    try:
+        print(json.dumps(summary, ensure_ascii=False))
+    except UnicodeEncodeError:
+        # Fallback for Windows console encoding issues
+        import sys
+        sys.stdout.buffer.write(json.dumps(summary, ensure_ascii=False).encode('utf-8'))
+        sys.stdout.buffer.write(b'\n')
 
 if __name__ == "__main__":
     main()

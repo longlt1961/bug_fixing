@@ -37,8 +37,8 @@ class RAGService:
         self.logger = logging.getLogger(__name__)
         
         # API endpoints
-        self.search_endpoint = f"{self.base_url}/rag/reasoning/search"
-        self.add_endpoint = f"{self.base_url}/rag/reasoning/add"
+        self.search_endpoint = f"{self.base_url}/rag/search"
+        self.add_endpoint = f"{self.base_url}/rag/add"
         
         # Default headers
         self.headers = {
@@ -120,7 +120,7 @@ class RAGService:
                 error_message=error_msg
             )
     
-    def add_fix_to_rag(self, fix_context: Dict, issues_data: List[Dict] = None, 
+    def add_fix_to_rag(self, fix_context: Dict, issues_data: Optional[List[Dict]] = None, 
                        raw_response: str = "", fixed_code: str = "") -> RAGAddResult:
         """
         Add bug fix information to RAG knowledge base
@@ -212,7 +212,7 @@ class RAGService:
             "combine_mode": "OR"
         }
     
-    def _transform_fix_to_rag_format(self, fix_context: Dict, issues_data: List[Dict] = None,
+    def _transform_fix_to_rag_format(self, fix_context: Dict, issues_data: Optional[List[Dict]] = None,
                                    raw_response: str = "", fixed_code: str = "") -> Dict:
         """
         Transform fix information to RAG add format

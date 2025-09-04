@@ -1,11 +1,9 @@
 import os
-import json
 import math
 from datetime import datetime
-from typing import List, Dict, Optional, Any
+from typing import List, Dict, Any
 from pymongo import MongoClient
 from pymongo.collection import Collection
-from pymongo.database import Database
 from dotenv import load_dotenv
 from utils.logger import logger
 
@@ -42,13 +40,13 @@ class MongoDBManager:
             
             # Test connection
             self.client.admin.command('ping')
-            logger.info("✅ Connected to MongoDB successfully")
+            logger.info("Connected to MongoDB successfully")
             
         except Exception as e:
-            logger.error(f"❌ Error connecting to MongoDB: {e}")
+            logger.error(f"Error connecting to MongoDB: {e}")
             raise e
     
-    def add_document(self, content: str, metadata: Dict = None, embedding: List[float] = None) -> str:
+    def add_document(self, content: str, metadata: Dict | None, embedding: List[float] | None) -> str:
         """Add document to MongoDB"""
         try:
             if metadata is None:
@@ -241,7 +239,7 @@ class MongoDBManager:
         """Close MongoDB connection"""
         if self.client:
             self.client.close()
-            logger.info("✅ MongoDB connection closed")
+            logger.info("MongoDB connection closed")
 
 # Global MongoDB manager instance
 mongo_manager = None

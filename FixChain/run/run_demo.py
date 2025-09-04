@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Demo script to run ExecutionService with or without RAG
 This bypasses MongoDB dependency for testing
@@ -7,7 +6,6 @@ This bypasses MongoDB dependency for testing
 import os
 import sys
 import json
-import time
 from datetime import datetime
 from typing import List, Dict
 from dotenv import load_dotenv
@@ -39,9 +37,6 @@ class ExecutionServiceNoMongo:
     def __init__(self, scan_directory=None, scanners=None, fixers=None):
         # Load environment variables
         self.dify_cloud_api_key = os.getenv('DIFY_CLOUD_API_KEY')
-        self.dify_local_api_key = os.getenv('DIFY_LOCAL_API_KEY')
-        self.sonar_host = os.getenv('SONAR_HOST', 'http://localhost:9000')
-        self.sonar_token = os.getenv('SONAR_TOKEN')
 
         # Configuration from environment variables
         self.max_iterations = int(os.getenv('MAX_ITERATIONS', '5'))
@@ -71,18 +66,17 @@ class ExecutionServiceNoMongo:
         self.current_source_file = 'code.py'  # Track current source file to scan
 
         # Log configuration
-        logger.info(f"ExecutionServiceNoMongo initialized with:")
-        logger.info(f"  Max iterations: {self.max_iterations}")
-        logger.info(f"  Project key: {self.project_key}")
-        logger.info(f"  Source code path: {self.source_code_path}")
-        logger.info(f"  Scan directory: {self.scan_directory}")
-        logger.info(f"  Scan mode: {self.scan_modes}")
-        logger.info(f"  Fix mode: {self.fix_modes}")
-        logger.info(f"  RAG available: {RAG_AVAILABLE}")
+        logger.info(f"Max iterations: {self.max_iterations}")
+        logger.info(f"Project key: {self.project_key}")
+        logger.info(f"Source code path: {self.source_code_path}")
+        logger.info(f"Scan directory: {self.scan_directory}")
+        logger.info(f"Scan mode: {self.scan_modes}")
+        logger.info(f"Fix mode: {self.fix_modes}")
+        logger.info(f"RAG available: {RAG_AVAILABLE}")
 
         # Initialize services
         self.analysis_service = AnalysisService(
-            self.dify_cloud_api_key, self.dify_local_api_key
+            self.dify_cloud_api_key
         )
         self.scanners: List = []
         # Arguments for built-in scanners
@@ -90,17 +84,7 @@ class ExecutionServiceNoMongo:
             'bearer': {
                 'project_key': self.project_key,
                 'scan_directory': self.scan_directory,
-            },
-            'sonar': {
-                'project_key': self.project_key,
-                'scan_directory': self.scan_directory,
-                'sonar_token': self.sonar_token,
-            },
-            'sonarq': {
-                'project_key': self.project_key,
-                'scan_directory': self.scan_directory,
-                'sonar_token': self.sonar_token,
-            },
+            }
         }
         
         for mode in self.scan_modes:
@@ -127,12 +111,6 @@ class ExecutionServiceNoMongo:
                 logger.error(f"Dataset file not found: {dataset_path}")
                 return False
             
-            # For demo without MongoDB, we'll just validate the dataset file
-            # In full implementation with MongoDB, use this approach:
-            # from modules.execution import ExecutionService
-            # execution_service = ExecutionService()
-            # return execution_service.insert_dataset_to_rag(dataset_path)
-            
             # For now, just return True since we're not using MongoDB
             logger.info(f"Dataset file validated: {dataset_path}")
             return True
@@ -143,7 +121,7 @@ class ExecutionServiceNoMongo:
             return False
 
     
-    def read_source_code(self, file_path: str = None) -> str:
+    def read_source_code(self, file_path: str | None = None) -> str:
         """Read source code from scan directory"""
         try:
             if file_path is None:
@@ -208,7 +186,6 @@ class ExecutionServiceNoMongo:
     def log_execution_result(self, result: Dict):
         """Log execution result (simplified version without MongoDB)"""
         logger.info("=== EXECUTION RESULT ===")
-        logger.info(f"Mode: {result.get('mode')}")
         logger.info(f"Project: {result.get('project_key')}")
         logger.info(f"Total bugs fixed: {result.get('total_bugs_fixed')}")
         logger.info(f"Total iterations: {len(result.get('iterations', []))}")
@@ -218,15 +195,15 @@ class ExecutionServiceNoMongo:
         for i, iteration in enumerate(result.get('iterations', []), 1):
             logger.info(f"Iteration {i}: {iteration.get('bugs_found')} bugs found, {iteration.get('fix_result', {}).get('fixed_count', 0)} fixed")
     
-    def run_execution(self, use_rag: bool = False, mode: DifyMode = DifyMode.CLOUD) -> Dict:
+    def run_execution(self, use_rag: bool = False) -> Dict:
         """Run execution with or without RAG support"""
         start_time = datetime.now()
-        logger.info(f"Starting execution {'with' if use_rag else 'without'} RAG (mode: {mode})")
+        logger.info(f"Starting execution {'with' if use_rag else 'without'} RAG")
         
         iterations = []
         total_bugs_fixed = 0
         for iteration in range(1, self.max_iterations + 1):
-            logger.info(f"\n=== ITERATION {iteration}/{self.max_iterations} ===")
+            logger.info(f"=== ITERATION {iteration}/{self.max_iterations} ===")
 
             # Scan for bugs using all configured scanners
             bugs = []
@@ -245,8 +222,6 @@ class ExecutionServiceNoMongo:
                 f"Iteration {iteration}: Found {bugs_found} open bugs ({bugs_type_bug} BUG, {bugs_type_code_smell} CODE_SMELL) across scanners: {', '.join(self.scan_modes).upper()}"
             )
 
-            
-            
             # Create iteration result
             iteration_result = {
                 "iteration": iteration,
@@ -291,7 +266,7 @@ class ExecutionServiceNoMongo:
             
             # Analysis bugs with Dify
             analysis_result = self.analysis_service.analyze_bugs_with_dify(
-                bugs, use_rag=use_rag, mode=mode, source_code=source_code
+                bugs, use_rag=use_rag, source_code=source_code
             )
             list_real_bugs = analysis_result.get("list_bugs")
 
@@ -392,13 +367,7 @@ class ExecutionServiceNoMongo:
         
         end_time = datetime.now()
         
-        # Prepare final result
-        mode_str = mode.value if hasattr(mode, 'value') else str(mode)
-        if use_rag:
-            mode_str = f"{mode_str}_with_rag"
-        
         result = {
-            "mode": mode_str,
             "project_key": self.project_key,
             "total_bugs_fixed": total_bugs_fixed,
             "iterations": iterations,
@@ -423,8 +392,6 @@ def main():
     parser = argparse.ArgumentParser(description='ExecutionService Demo - Bug fixing with Dify AI')
     parser.add_argument('--insert_rag', action='store_true',
                        help='Run with RAG support (insert default RAG data and use RAG for bug fixing)')
-    parser.add_argument('--mode', choices=['cloud', 'local'], default='cloud',
-                       help='Dify mode to use (default: cloud)')
     parser.add_argument('--project', type=str, default='projects/demo_project',
                        help='Path to project directory to scan (default: projects/demo_project)')
     parser.add_argument('--scanners', type=str, default='sonar',
@@ -449,7 +416,7 @@ def main():
             print("Falling back to execution without RAG")
             use_rag = False
         else:
-            print("\n🔍 Running with RAG support (--insert_rag specified)")
+            print("\nRunning with RAG support")
             use_rag = True
     else:
         # Default to running without RAG (no interactive mode)
@@ -464,22 +431,18 @@ def main():
             fixers=args.fixers,
         )
         
-        # Determine Dify mode
-        dify_mode = DifyMode.CLOUD if args.mode == 'cloud' else DifyMode.LOCAL
-        
         # Run execution based on user choice
         if use_rag:
-            print(f"\nRunning with RAG support (mode: {args.mode}, scanners: {args.scanners})...")
+            print(f"\nRunning with RAG support, scanners: {args.scanners}")
         else:
-            print(f"\nRunning without RAG (mode: {args.mode}, scanners: {args.scanners})...")
+            print(f"\nRunning without RAG, scanners: {args.scanners})...")
         
-        result = service.run_execution(use_rag=use_rag, mode=dify_mode)
+        result = service.run_execution(use_rag=use_rag)
         
         # Display results
         print("\n" + "="*50)
         print("📊 EXECUTION RESULTS")
         print("="*50)
-        print(f"Mode: {result.get('mode')}")
         print(f"Project: {result.get('project_key')}")
         print(f"Total bugs fixed: {result.get('total_bugs_fixed')}")
         print(f"Total iterations: {len(result.get('iterations', []))}")
@@ -515,14 +478,11 @@ def main():
                 print(f"        + Average similarity: {fix_result.get('average_similarity', 0):.3f}")
                 print(f"        + Threshold met: {fix_result.get('threshold_met_count', 0)}")
             
-            # print(f"    Bugs fixed: {fix_result.get('fixed_count', 0)}")
-            # print(f"    Bugs failed: {fix_result.get('failed_count', 0)}")
             if fix_result.get('message'):
                 print(f"    Message: {fix_result.get('message')}")
         
-        print(f"\n⏰ Start time: {result.get('start_time')}")
-        print(f"⏰ End time: {result.get('end_time')}")
-        print("\n✅ Demo completed successfully!")
+        print(f"\nStart time: {result.get('start_time')}")
+        print(f"\nEnd time: {result.get('end_time')}")
         
     except Exception as e:
         print(f"\n❌ Error during execution: {str(e)}")

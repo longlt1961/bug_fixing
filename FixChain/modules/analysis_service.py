@@ -3,15 +3,14 @@ import json
 from typing import Dict, List
 
 from utils.logger import logger
-from lib.dify_lib import DifyMode, run_workflow_with_dify
+from lib.dify_lib import run_workflow_with_dify
 
 
 class AnalysisService:
     """Service for analyzing bugs and interacting with Dify"""
 
-    def __init__(self, dify_cloud_api_key: str | None = None, dify_local_api_key: str | None = None):
+    def __init__(self, dify_cloud_api_key: str | None = None):
         self.dify_cloud_api_key = dify_cloud_api_key
-        self.dify_local_api_key = dify_local_api_key
 
     def count_bug_types(self, bugs: List[Dict]) -> Dict[str, int]:
         counts: Dict[str, int] = {"BUG": 0, "CODE_SMELL": 0, "VULNERABILITY": 0}
@@ -24,13 +23,13 @@ class AnalysisService:
         counts["TOTAL"] = len(bugs)
         return counts
 
-    def analyze_bugs_with_dify(self, bugs: List[Dict], use_rag: bool = False, mode: DifyMode = DifyMode.CLOUD, source_code: str = "") -> Dict:
+    def analyze_bugs_with_dify(self, bugs: List[Dict], use_rag: bool = False, source_code: str = "") -> Dict:
         list_bugs = []
         bugs_to_fix = 0
         try:
-            api_key = self.dify_cloud_api_key if mode == DifyMode.CLOUD else self.dify_local_api_key
+            api_key = self.dify_cloud_api_key
             if not api_key:
-                logger.error(f"No API key found for mode: {mode}")
+                logger.error(f"No API key found for Dify")
                 return {"success": False, "error": "Missing API key", "list_bugs": list_bugs, "bugs_to_fix": bugs_to_fix}
             inputs = {
                 "is_use_rag": str(use_rag),
@@ -43,7 +42,6 @@ class AnalysisService:
                 inputs=inputs,
                 user="hieult",
                 response_mode="blocking",
-                mode=mode,
             )
             outputs = response.get("data", {}).get("outputs", {})
             list_bugs = outputs.get("list_bugs", "")

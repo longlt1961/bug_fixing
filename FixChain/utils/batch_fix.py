@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Enhanced Batch Fix Script with Best Practices - CORRECTED VERSION
 - Fixed infinite directory creation loop
@@ -8,12 +7,9 @@ Enhanced Batch Fix Script with Best Practices - CORRECTED VERSION
 
 import google.generativeai as genai
 import os
-import sys
-import glob
 import json
 import ast
 import shutil
-import hashlib
 import subprocess
 import argparse
 from pathlib import Path
@@ -25,8 +21,7 @@ from dataclasses import dataclass
 from datetime import datetime
 import tempfile
 import fnmatch
-import requests
-from rag_service import RAGService, RAGSearchResult, RAGAddResult
+from rag_service import RAGService
 
 @dataclass
 class FixResult:
@@ -161,7 +156,7 @@ class CodeValidator:
 class SecureFixProcessor:
     """Enhanced secure processor with comprehensive validation"""
     
-    def __init__(self, api_key: str, source_dir: str, backup_dir: str = None, similarity_threshold: float = 0.85):
+    def __init__(self, api_key: str, source_dir: str, backup_dir: str | None, similarity_threshold: float = 0.85):
         self.similarity_threshold = similarity_threshold  # Ngưỡng chấp nhận độ tương thích
         self.model = self._setup_gemini(api_key)
         self.source_dir = os.path.abspath(source_dir)  # Store absolute path of source directory
@@ -171,15 +166,8 @@ class SecureFixProcessor:
         # Initialize RAG service
         self.rag_service = RAGService()
         
-        # Create unique backup directory with timestamp - DISABLED
-        # if backup_dir:
-        #     self.backup_dir = os.path.abspath(backup_dir)
-        # else:
-        #     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        #     self.backup_dir = os.path.abspath(f"./backups/backup_{timestamp}")
-        
-        # self._create_backup_dir()
-        self.backup_dir = None
+        # Create unique backup directory
+        self.backup_dir = "backups"
         self._setup_logging()
     
     def _setup_gemini(self, api_key: str):
@@ -405,8 +393,8 @@ class SecureFixProcessor:
             )
     
     def fix_file_with_validation(self, file_path: str, template_type: str = 'fix', 
-                                 custom_prompt: str = None, max_retries: int = 2, 
-                                 issues_data: List[Dict] = None, enable_rag: bool = False) -> FixResult:
+                                 custom_prompt: Optional[str] = None, max_retries: int = 2, 
+                                 issues_data: Optional[List[Dict]] = None, enable_rag: bool = False) -> FixResult:
         """Fix file with comprehensive validation"""
         start_time = datetime.now()
         
@@ -680,7 +668,7 @@ Chỉ trả về code đã sửa, không cần markdown formatting hay giải th
         except Exception as e:
             print(f"Warning: Could not log AI response: {e}")
     
-    def search_rag_for_similar_fixes(self, file_path: str, issues_data: List[Dict] = None) -> Optional[str]:
+    def search_rag_for_similar_fixes(self, file_path: str, issues_data: Optional[List[Dict]] = None) -> Optional[str]:
         """Search RAG for similar bug fixes"""
         try:
             if not issues_data:

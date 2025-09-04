@@ -10,20 +10,16 @@ def setup_logger():
         os.makedirs(log_dir)
 
     # Create a logger
-    logger = logging.getLogger('innolab')
+    logger = logging.getLogger('InnoLab')
     logger.setLevel(logging.INFO)
 
     if not logger.handlers:
         console_handler = logging.StreamHandler()
-        timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-        file_handler = logging.FileHandler(f'logs/innolab_{timestamp}.log')
 
         log_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         console_handler.setFormatter(log_format)
-        file_handler.setFormatter(log_format)
 
         logger.addHandler(console_handler)
-        logger.addHandler(file_handler)
 
     return logger
 

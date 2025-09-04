@@ -1,13 +1,11 @@
 import os
-import asyncio
+import uvicorn
+import google.generativeai as genai
 from typing import List, Dict, Any, Union, Optional
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
-import google.generativeai as genai
 from dotenv import load_dotenv
-import numpy as np
 from modules.mongodb_service import MongoDBManager
-import uvicorn
 
 # Load environment variables from root directory
 root_env_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), '.env')
@@ -41,7 +39,7 @@ async def startup_event():
 class DocumentInput(BaseModel):
     content: str = Field(
         ..., 
-        description="Nội dung document cần thêm vào knowledge base",
+        description="Document cần thêm vào knowledge base",
         min_length=10,
         example="Python là một ngôn ngữ lập trình mạnh mẽ và dễ học. Nó được sử dụng rộng rãi trong phát triển web, data science, và AI."
     )
@@ -124,15 +122,15 @@ async def generate_answer_with_gemini(query: str, context_docs: List[Dict]) -> s
         ])
         
         prompt = f"""
-Bạn là một AI assistant thông minh. Dựa trên thông tin được cung cấp, hãy trả lời câu hỏi một cách chính xác và chi tiết.
+                Bạn là một AI assistant thông minh. Dựa trên thông tin được cung cấp, hãy trả lời câu hỏi một cách chính xác và chi tiết.
 
-Thông tin tham khảo:
-{context}
+                Thông tin tham khảo:
+                {context}
 
-Câu hỏi: {query}
+                Câu hỏi: {query}
 
-Hãy trả lời bằng tiếng Việt, dựa trên thông tin được cung cấp. Nếu không có thông tin liên quan, hãy nói rằng bạn không có đủ thông tin để trả lời.
-"""
+                Hãy trả lời bằng tiếng Việt, dựa trên thông tin được cung cấp. Nếu không có thông tin liên quan, hãy nói rằng bạn không có đủ thông tin để trả lời.
+                """
         
         response = llm_model.generate_content(prompt)
         return response.text
@@ -150,13 +148,12 @@ async def root():
             "MongoDB document storage",
             "Gemini Flash 2.0 embeddings",
             "Gemini Flash 2.0 generation",
-            "Semantic search",
-            "Vietnamese support"
+            "Semantic search"
         ],
         "endpoints": {
-            "add_document": "POST /reasoning/add",
-            "search": "POST /reasoning/search",
-            "stats": "GET /reasoning/stats"
+            "add_document": "POST /add",
+            "search": "POST /search",
+            "stats": "GET /stats"
         }
     }
 
@@ -169,7 +166,7 @@ async def health_check():
     except Exception as e:
         return {"status": "unhealthy", "error": str(e)}
 
-@app.post("/reasoning/add")
+@app.post("/add")
 async def add_document(doc_input: DocumentInput):
     """Add a document to MongoDB with Gemini embeddings"""
     try:
@@ -192,7 +189,7 @@ async def add_document(doc_input: DocumentInput):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error adding document: {str(e)}")
 
-@app.post("/reasoning/search", response_model=SearchResponse)
+@app.post("/search", response_model=SearchResponse)
 async def search_documents(search_input: SearchInput):
     """
     Tìm kiếm documents sử dụng Gemini embeddings và tạo câu trả lời AI
@@ -313,7 +310,7 @@ async def search_documents(search_input: SearchInput):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error during search: {str(e)}")
 
-@app.get("/reasoning/stats")
+@app.get("/stats")
 async def get_stats():
     """Get system statistics"""
     try:
@@ -329,7 +326,7 @@ async def get_stats():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error getting stats: {str(e)}")
 
-@app.delete("/reasoning/documents/{doc_id}")
+@app.delete("documents/{doc_id}")
 async def delete_document(doc_id: str):
     """Delete a document from MongoDB"""
     try:
@@ -343,7 +340,7 @@ async def delete_document(doc_id: str):
 
 if __name__ == "__main__":
     uvicorn.run(
-        "rag_mongodb_gemini:app",
+        "rag_service:app",
         host="0.0.0.0",
         port=8000,
         reload=True

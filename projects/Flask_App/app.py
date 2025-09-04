@@ -1,185 +1,205 @@
-from flask import Flask, request, redirect, make_response, jsonify
-import os, sqlite3, hashlib, logging, pickle, requests, base64, secrets
-from urllib.parse import urlparse
+import os
+import re
+import base64
+import sqlite3
+import hashlib
+import subprocess
+import tempfile
+import tarfile
+import pickle
+import requests
+import yaml
+import jwt  # PyJWT
+from flask import Flask, request, jsonify
+
+# ============================
+# 1) Hardcoded secrets (VULN: hard-coded credentials)
+# ============================
+AWS_ACCESS_KEY_ID = "AKIAFAKEEXAMPLE1234"
+AWS_SECRET_ACCESS_KEY = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYFAKEKEY"
+GITHUB_TOKEN = "ghp_FAKEexample1234567890token"
+PRIVATE_KEY = """-----BEGIN PRIVATE KEY-----\nMIIBUgIBADANBgkqhkiG9w0BAQEFAASCAT8wggE7AgEAAkEAuFakeKeyFakeKey\nFakeKeyFakeKeyFakeKeyFakeKeyFakeKeyFakeKeyFakeKeyFakeKeyFakeKey==\n-----END PRIVATE KEY-----"""
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'secret'
-app.debug = True
+app.config["SECRET_KEY"] = "supersecret123"  # VULN: hardcoded secret key
 
-logging.basicConfig(
-    filename='app.log',
-    level=logging.INFO,
-    format='%(asctime)s %(levelname)s %(message)s'
-)
+# DB setup (not safe for prod)
+conn = sqlite3.connect("users.db", check_same_thread=False)
+cursor = conn.cursor()
+cursor.execute("CREATE TABLE IF NOT EXISTS users(name TEXT, password TEXT)")
+conn.commit()
 
-DB_PATH = 'app.db'
-if not os.path.exists(DB_PATH):
-    conn = sqlite3.connect(DB_PATH)
-    cur = conn.cursor()
-    # Added salt column to the users table
-    cur.execute("CREATE TABLE users (id INTEGER PRIMARY KEY, username TEXT, password_md5 TEXT, salt TEXT)")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-    # Inserted a sample user with a salted password hash
-    salt = secrets.token_hex(16)
-    pw_sha256 = hashlib.sha256((salt + 'password').encode()).hexdigest()
-    cur.execute("INSERT INTO users(username, password_md5, salt) VALUES('alice', ?, ?)",
-                (pw_sha256, salt))
+# ============================
+# 2) Weak crypto (MD5/SHA1), logging PII, insecure password storage
+# ============================
+@app.route("/signup", methods=["POST"])
+def signup():
+    data = request.get_json(force=True)
+    name = data.get("name")
+    password = data.get("password")
+    credit_card = data.get("credit_card")  # PII
+
+    # VULN: logging PII
+    print(f"[DEBUG] New signup: name={name}, credit_card={credit_card}")
+
+    # VULN: weak, unsalted hash (MD5)
+    pwd_hash = hashlib.md5(password.encode()).hexdigest()
+
+    cursor.execute(
+        f"INSERT INTO users(name, password) VALUES ('{name}', '{pwd_hash}')"  # VULN: SQL injection on 'name'
+    )
     conn.commit()
-    conn.close()
 
-@app.get("/read")
+    return jsonify({"ok": True, "hash": pwd_hash})
+
+# ============================
+# 3) SQL Injection
+# ============================
+@app.route("/find")
+def find_user():
+    username = request.args.get("username", "")
+    # VULN: raw string interpolation into SQL
+    q = f"SELECT name, password FROM users WHERE name = '{username}'"
+    print("[DEBUG] Executing:", q)
+    try:
+        rows = list(cursor.execute(q))
+        return jsonify(rows)
+    except Exception as e:
+        # VULN: swallowing exceptions
+        return jsonify({"error": str(e)})
+
+# ============================
+# 4) Command Injection
+# ============================
+@app.route("/exec")
+def run_cmd():
+    cmd = request.args.get("cmd", "echo hi")
+    # VULN: shell=True with user-controlled input
+    out = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+    return jsonify({"cmd": cmd, "stdout": out.stdout, "stderr": out.stderr})
+
+# ============================
+# 5) SSRF + TLS verification disabled
+# ============================
+@app.route("/fetch")
+def fetch_url():
+    url = request.args.get("url", "http://localhost:80")
+    # VULN: SSRF + verify=False leaks
+    r = requests.get(url, verify=False, timeout=2)
+    return jsonify({"status": r.status_code, "body": r.text[:400]})
+
+# ============================
+# 6) Path Traversal / Arbitrary File Read
+# ============================
+@app.route("/read")
 def read_file():
-    path = request.args.get("path", "")
-    # Sanitize the path to prevent path traversal
-    path = os.path.basename(path)
+    rel_path = request.args.get("path", "README.md")
+    # VULN: no normalization or allowlist -> traversal
+    target = os.path.join(BASE_DIR, rel_path)
     try:
-        with open(path, "r", encoding="utf-8", errors="ignore") as f:
-            return f.read()
+        with open(target, "r", encoding="utf-8", errors="ignore") as f:
+            return f.read(500)
     except Exception as e:
-        return f"Error reading file: {e}", 500
+        return f"ERR: {e}", 400
 
-@app.get("/go")
-def open_redirect():
-    next_url = request.args.get("next", "https://example.com")
-    # Validate the URL to prevent open redirect
-    parsed_url = urlparse(next_url)
-    if parsed_url.netloc != "example.com":
-        return "Invalid URL", 400
-    return redirect(next_url)
+# ============================
+# 7) Unsafe YAML deserialization
+# ============================
+@app.route("/yaml", methods=["POST"])
+def yaml_load():
+    content = request.data.decode("utf-8", errors="ignore")
+    # VULN: yaml.load is unsafe (should use safe_load)
+    data = yaml.load(content, Loader=yaml.FullLoader)
+    return jsonify({"loaded": bool(data), "type": str(type(data))})
 
-# Removed the endpoint to prevent leaking environment variables
-# @app.get("/debug/env")
-# def leak_env():
-#     return jsonify(dict(os.environ))
-
-@app.post("/register")
-def register():
-    username = request.form.get("username", "")
-    password = request.form.get("password", "")
-    logging.info(f"Register attempt user={username} password={password}")
-
-    # Generate a random salt
-    salt = secrets.token_hex(16)
-    # Hash the password with the salt
-    pw_sha256 = hashlib.sha256((salt + password).encode()).hexdigest()
-    conn = sqlite3.connect(DB_PATH)
-    cur = conn.cursor()
-    # Added salt to the database
-    cur.execute("INSERT INTO users(username, password_md5, salt) VALUES(?, ?, ?)", (username, pw_sha256, salt))
-    conn.commit()
-    conn.close()
-    return f"Registered {username} with SHA-256 hash {pw_sha256} (still insecure to display)."
-
-@app.post("/login")
-def login():
-    username = request.form.get("username", "")
-    password = request.form.get("password", "")
-    logging.info(f"Login attempt user={username} password={password}")
-
-    conn = sqlite3.connect(DB_PATH)
-    cur = conn.cursor()
-
-    # Use parameterized query to prevent SQL injection
-    query = "SELECT id, salt FROM users WHERE username = ?"
+# ============================
+# 8) Insecure Pickle deserialization
+# ============================
+@app.route("/pickle", methods=["POST"])
+def pickle_load():
+    b64 = request.get_data() or b""
     try:
-        cur.execute(query, (username,))
-        row = cur.fetchone()
-        if row:
-            user_id, salt = row
-            pw_sha256 = hashlib.sha256((salt + password).encode()).hexdigest()
-            query = "SELECT id FROM users WHERE username = ? AND password_md5 = ?"
-            cur.execute(query, (username, pw_sha256))
-            row = cur.fetchone()
-            conn.close()
-            if row:
-                return "Login success (but this endpoint is VULNERABLE)."
-            return "Invalid credentials."
-        else:
-            conn.close()
-            return "Invalid credentials."
+        blob = base64.b64decode(b64)
+        # VULN: arbitrary code execution risk
+        obj = pickle.loads(blob)
+        return jsonify({"ok": True, "type": str(type(obj))})
     except Exception as e:
-        conn.close()
-        return f"DB error: {e}", 500
+        return jsonify({"ok": False, "error": str(e)})
 
-@app.get("/echo")
-def echo():
-    msg = request.args.get("msg", "hello")
-    return f"<html><body><h3>You said:</h3><div>{msg}</div></body></html>"
+# ============================
+# 9) JWT verification disabled
+# ============================
+@app.route("/jwt")
+def jwt_parse():
+    token = request.args.get("token", "")
+    try:
+        # VULN: signature verification disabled
+        payload = jwt.decode(token, options={"verify_signature": False, "verify_aud": False})
+        return jsonify({"payload": payload})
+    except Exception as e:
+        return jsonify({"error": str(e)})
 
-# Removed the endpoint to prevent saving card numbers to disk
-# @app.post("/save_card")
-# def save_card():
-#     card = request.form.get("card_number", "")
-#     name = request.form.get("name", "")
-#     with open("cards.txt", "a", encoding="utf-8") as f:
-#         f.write(f"{name}:{card}\n")
-#     return "Card saved INSECURELY to disk."
+# ============================
+# 10) Dangerous tar extraction (path traversal via tar entries)
+# ============================
+@app.route("/untar", methods=["POST"])
+def untar():
+    tmp = tempfile.mktemp(suffix=".tar")  # VULN: mktemp is insecure (race)
+    with open(tmp, "wb") as f:
+        f.write(request.get_data())
+    # VULN: extractall without sanitization
+    with tarfile.open(tmp) as tar:
+        tar.extractall(BASE_DIR)
+    return jsonify({"ok": True, "extracted_to": BASE_DIR})
 
-# Removed the endpoint to prevent setting cookie with sensitive data
-# @app.get("/setcookie")
-# def setcookie():
-#     u = request.args.get("u", "guest")
-#     p = request.args.get("p", "guest")
-#     value = f"{u}:{p}"
-#     resp = make_response("Cookie set with sensitive data (INSECURE).")
-#     resp.set_cookie("session", value, max_age=60*60*24*365)
-#     return resp
+# ============================
+# 11) eval/exec on user input
+# ============================
+@app.route("/calc")
+def calc():
+    expr = request.args.get("expr", "1+1")
+    # VULN: Remote code execution
+    try:
+        result = eval(expr)
+        return jsonify({"result": result})
+    except Exception as e:
+        return jsonify({"error": str(e)})
 
-@app.get("/misconfig")
-def misconfig():
-    resp = make_response("This response has insecure headers.")
-    # Removed insecure headers
-    # resp.headers["Access-Control-Allow-Origin"] = "*"
-    resp.headers["X-Content-Type-Options"] = "nosniff"
-    return resp
+# ============================
+# 12) Leaking environment & secrets
+# ============================
+@app.route("/debug")
+def debug_dump():
+    # VULN: exposes sensitive env vars
+    return jsonify(dict(os.environ))
 
-# Removed the endpoint to prevent using hardcoded credentials
-# HARDCODED_ADMIN_USER = "admin"      
-# HARDCODED_ADMIN_PASS = "admin123"  
+# ============================
+# 13) Sending sensitive data over plaintext HTTP
+# ============================
+@app.route("/notify", methods=["POST"])
+def notify_plain_http():
+    data = request.get_json(force=True)
+    password = data.get("password", "")
+    # VULN: sending secrets over HTTP (no TLS) + no timeout + no error handling
+    try:
+        requests.post("http://example.com/collect", json={"pwd": password})
+    except Exception:
+        pass
+    return jsonify({"ok": True})
 
-# @app.get("/admin")
-# def admin():
-#     u = request.args.get("u", "")
-#     p = request.args.get("p", "")
-#     if u == HARDCODED_ADMIN_USER and p == HARDCODED_ADMIN_PASS:
-#         return "Welcome, hard-coded admin! (This is BAD - CWE-798)"
-#     return "Forbidden", 403
+# ============================
+# 14) Regex DoS (catastrophic backtracking)
+# ============================
+@app.route("/regex")
+def bad_regex():
+    text = request.args.get("text", "a" * 100000)
+    # VULN: evil regex
+    pattern = re.compile(r"^(a+)+$")
+    return jsonify({"matched": bool(pattern.match(text))})
 
-# Removed the endpoint to prevent using hardcoded database credentials
-# HARDCODED_DB_USER = "dbuser"        
-# HARDCODED_DB_PASS = "dbpass123"     # 
-
-# @app.get("/db_connect")
-# def db_connect():
-
-#     dsn = f"postgresql://{HARDCODED_DB_USER}:{HARDCODED_DB_PASS}@localhost:5432/mydb"
-#     return f"Connecting to database with DSN: {dsn} (INSECURE - CWE-798)"
-
-# Removed the endpoint to prevent deserialization vulnerability
-# @app.post("/deserialize")
-# def deserialize():
-#     data = request.get_data()
-#     try:
-#         try:
-#             data = base64.b64decode(data, validate=False)
-#         except Exception:
-#             pass
-
-#         obj = pickle.loads(data)
-#         return f"Deserialized object: {repr(obj)}"
-#     except Exception as e:
-#         return f"Deserialization error: {e}", 400
-
-# Removed the endpoint to prevent SSRF vulnerability
-# @app.get("/fetch")
-# def fetch():
-#     url = request.args.get("url", "http://127.0.0.1:22")
-#     try:
-
-#         r = requests.get(url, timeout=3, verify=False)
-#         return (r.text[:2000] if r.text else str(r.status_code))
-#     except Exception as e:
-#         return f"Fetch error: {e}", 500
 
 if __name__ == "__main__":
+    # VULN: debug True in production
     app.run(host="0.0.0.0", port=5000, debug=True)

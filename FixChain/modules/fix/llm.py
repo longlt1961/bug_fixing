@@ -10,11 +10,14 @@ from .base import Fixer
 
 class LLMFixer(Fixer):
     """Service that applies fixes using batch_fix.py"""
+    global issues_file_path 
+    issues_file_path = ""
 
     def __init__(self, scan_directory: str):
         self.scan_directory = scan_directory
 
     def fix_bugs(self, list_real_bugs: List[Dict], use_rag: bool = False) -> Dict:
+        global issues_file_path
         try:
             logger.info(
                 f"Starting fix_bugs for {len(list_real_bugs)} bugs"
@@ -23,7 +26,7 @@ class LLMFixer(Fixer):
             if os.path.isabs(self.scan_directory):
                 source_dir = self.scan_directory
             else:
-                innolab_root = os.getenv("INNOLAB_ROOT_PATH", "c:\\Users\\HieuLT\\Desktop\\InnoLab\\projects")
+                innolab_root = os.getenv("INNOLAB_ROOT_PATH", "D:\\VPAX\\InnoLab\\projects")
                 logger.info(f"DEBUG: innolab_root = {innolab_root}")
                 # Use scan_directory directly with innolab_root
                 source_dir = os.path.join(innolab_root, self.scan_directory)
@@ -38,10 +41,10 @@ class LLMFixer(Fixer):
                 }
             original_dir = os.getcwd()
             # Get SonarQ directory relative to the actual InnoLab root
-            actual_innolab_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-            sonar_dir = os.path.join(actual_innolab_root, "SonarQ")
+            actual_innolab_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+            utils_dir = os.path.join(actual_innolab_root, "utils")
             try:
-                os.chdir(sonar_dir)
+                os.chdir(utils_dir)
                 # Create issues file in the project directory instead of SonarQ directory
                 issues_file_path = os.path.join(source_dir, "list_real_bugs.json")
                 try:
@@ -66,7 +69,7 @@ class LLMFixer(Fixer):
                     }
                 # Use the original source_dir to fix files in the correct location
                 scan_dir_path = source_dir
-                batch_fix_path = os.path.join(sonar_dir, "batch_fix.py")
+                batch_fix_path = os.path.join(utils_dir, "batch_fix.py")
                 fix_cmd = [
                     "python",
                     batch_fix_path,
@@ -83,9 +86,10 @@ class LLMFixer(Fixer):
                 success, output_lines = CLIService.run_command_stream(fix_cmd)
                 if success:
                     output_text = "".join(output_lines)
+                    global summary_line
+                    summary_line = None
                     try:
                         # Look for the JSON result line that starts with {"success"
-                        summary_line = None
                         for line in reversed(output_lines):
                             line = line.strip()
                             if line.startswith('{"success"'):

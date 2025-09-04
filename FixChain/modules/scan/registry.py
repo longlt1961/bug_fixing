@@ -20,7 +20,5 @@ def create(name: str, *args, **kwargs) -> Scanner:
 
 # Register built-in scanners
 from .bearer import BearerScanner
-from .sonar import SonarQScanner
 
 register("bearer", BearerScanner)
-register("sonarq", SonarQScanner)

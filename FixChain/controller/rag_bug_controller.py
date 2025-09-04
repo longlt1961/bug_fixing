@@ -5,15 +5,13 @@ Provides endpoints for importing bugs as RAG documents and fixing bugs
 """
 
 import os
-import json
 from datetime import datetime
 from typing import List, Dict, Any, Optional
-from fastapi import APIRouter, HTTPException, UploadFile, File
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 import google.generativeai as genai
 from dotenv import load_dotenv
-import numpy as np
-from modules.mongodb_service import MongoDBManager, get_mongo_manager
+from modules.mongodb_service import get_mongo_manager
 import uvicorn
 from bson import ObjectId
 
@@ -79,7 +77,6 @@ class BugFixSuggestionRequest(BaseModel):
 def generate_gemini_embedding(text: str) -> List[float]:
     """Generate embedding using Gemini"""
     try:
-        model = genai.GenerativeModel('gemini-2.0-flash-exp')
         result = genai.embed_content(
             model="models/text-embedding-004",
             content=text,
@@ -128,7 +125,7 @@ def create_bug_rag_metadata(bug: BugRAGItem) -> Dict[str, Any]:
         "severity": bug.severity,
         "status": bug.status,
         "labels": bug.labels,
-        "created_at": datetime.utcnow(),
+        "created_at": datetime.now(),
         "document_type": "bug_rag"
     }
     
@@ -162,7 +159,7 @@ def convert_objectid_to_str(obj):
     return obj
 
 # API Endpoints
-@app.post("/rag-bugs/import")
+@app.post("/import")
 async def import_bugs_as_rag(request: BugRAGImportRequest):
     """Import bugs as RAG documents into MongoDB"""
     try:
@@ -211,7 +208,7 @@ async def import_bugs_as_rag(request: BugRAGImportRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error importing bugs: {str(e)}")
 
-@app.post("/rag-bugs/search")
+@app.post("/search")
 async def search_bugs_in_rag(request: BugSearchRequest):
     """Search for bugs in RAG collection"""
     try:
@@ -285,7 +282,7 @@ async def search_bugs_in_rag(request: BugSearchRequest):
         except Exception as fallback_error:
             raise HTTPException(status_code=500, detail=f"Error searching bugs: {str(fallback_error)}")
 
-@app.post("/rag-bugs/fix")
+@app.post("/fix")
 async def fix_bug(request: BugFixRequest):
     """Fix a bug and update its status in the collection"""
     try:
@@ -346,7 +343,7 @@ async def fix_bug(request: BugFixRequest):
             raise HTTPException(status_code=404, detail=str(e))
         raise HTTPException(status_code=500, detail=f"Error fixing bug: {str(e)}")
 
-@app.post("/rag-bugs/suggest-fix")
+@app.post("/suggest-fix")
 async def suggest_bug_fix(request: BugFixSuggestionRequest):
     """Get AI-powered fix suggestions for a bug"""
     try:
@@ -383,12 +380,12 @@ async def suggest_bug_fix(request: BugFixSuggestionRequest):
         model = genai.GenerativeModel('gemini-2.0-flash-exp')
         
         prompt = f"""
-Analyze the following bug and provide fix suggestions:
+                Analyze the following bug and provide fix suggestions:
 
-BUG INFORMATION:
-{bug_content}
+                BUG INFORMATION:
+                {bug_content}
 
-"""
+                """
         
         if similar_fixes:
             prompt += "\nSIMILAR FIXES FOR REFERENCE:\n"
@@ -399,16 +396,15 @@ BUG INFORMATION:
                     prompt += f"   Code: {fix['fixed_code']}\n"
         
         prompt += """
+                    Please provide:
+                    1. Root cause analysis
+                    2. Recommended fix approach
+                    3. Code suggestions (if applicable)
+                    4. Potential risks or considerations
+                    5. Testing recommendations
 
-Please provide:
-1. Root cause analysis
-2. Recommended fix approach
-3. Code suggestions (if applicable)
-4. Potential risks or considerations
-5. Testing recommendations
-
-Format your response in a clear, structured manner.
-"""
+                    Format your response in a clear, structured manner.
+                    """
         
         response = model.generate_content(prompt)
         
@@ -425,7 +421,7 @@ Format your response in a clear, structured manner.
             raise HTTPException(status_code=404, detail=str(e))
         raise HTTPException(status_code=500, detail=f"Error generating fix suggestion: {str(e)}")
 
-@app.get("/rag-bugs/stats")
+@app.get("/stats")
 async def get_rag_bug_stats():
     """Get statistics about bugs in RAG collection"""
     try:

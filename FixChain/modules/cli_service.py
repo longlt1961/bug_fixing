@@ -103,15 +103,3 @@ class CLIService:
         except Exception as e:
             logger.error(f"Error running command {command}: {e}")
             return False, output_lines
-
-    @staticmethod
-    def run_cline_autofix(file_path: str) -> bool:
-        """Run the cline CLI autofix for a given file.
-        
-        Note: Cline is a VS Code extension, not a standalone CLI tool.
-        This function is kept for compatibility but will always return True
-        with a warning message.
-        """
-        logger.warning(f"Cline autofix requested for {file_path}, but Cline is a VS Code extension, not a CLI tool")
-        logger.info("To use Cline, install the VS Code extension from: https://marketplace.visualstudio.com/items?itemName=saoudrizwan.claude-dev")
-        return True  # Return True to not break the workflow

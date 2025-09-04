@@ -9,11 +9,10 @@ import os
 import json
 import csv
 from datetime import datetime
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Optional
 from enum import Enum
 from pydantic import BaseModel, Field
-from fastapi import FastAPI, HTTPException, UploadFile, File
-from fastapi.responses import JSONResponse
+from fastapi import HTTPException, UploadFile, File
 import google.generativeai as genai
 from modules.mongodb_service import MongoDBManager
 from dotenv import load_dotenv
@@ -203,47 +202,47 @@ async def generate_bug_analysis(bugs_data: List[Dict], analysis_type: str) -> st
         
         if analysis_type == "summary":
             prompt = f"""
-Phân tích tổng quan về {len(bugs_data)} bugs sau đây:
+                    Phân tích tổng quan về {len(bugs_data)} bugs sau đây:
 
-{json.dumps(serializable_data, indent=2, ensure_ascii=False)}
+                    {json.dumps(serializable_data, indent=2, ensure_ascii=False)}
 
-Hãy cung cấp:
-1. Tổng quan về số lượng bugs theo loại
-2. Phân tích mức độ nghiêm trọng
-3. Các vấn đề phổ biến nhất
-4. Đề xuất ưu tiên xử lý
-5. Xu hướng và pattern
+                    Hãy cung cấp:
+                    1. Tổng quan về số lượng bugs theo loại
+                    2. Phân tích mức độ nghiêm trọng
+                    3. Các vấn đề phổ biến nhất
+                    4. Đề xuất ưu tiên xử lý
+                    5. Xu hướng và pattern
 
-Trả lời bằng tiếng Việt, chi tiết và có cấu trúc.
-"""
+                    Trả lời bằng tiếng Việt, chi tiết và có cấu trúc.
+                    """
         elif analysis_type == "trend":
             prompt = f"""
-Phân tích xu hướng bugs từ dữ liệu sau:
+                    Phân tích xu hướng bugs từ dữ liệu sau:
 
-{json.dumps(serializable_data, indent=2, ensure_ascii=False)}
+                    {json.dumps(serializable_data, indent=2, ensure_ascii=False)}
 
-Hãy phân tích:
-1. Xu hướng theo thời gian
-2. Pattern theo component/file
-3. Phân bố theo loại bug
-4. Dự đoán và khuyến nghị
+                    Hãy phân tích:
+                    1. Xu hướng theo thời gian
+                    2. Pattern theo component/file
+                    3. Phân bố theo loại bug
+                    4. Dự đoán và khuyến nghị
 
-Trả lời bằng tiếng Việt.
-"""
+                    Trả lời bằng tiếng Việt.
+                    """
         elif analysis_type == "priority":
             prompt = f"""
-Đề xuất ưu tiên xử lý bugs dựa trên dữ liệu:
+                    Đề xuất ưu tiên xử lý bugs dựa trên dữ liệu:
 
-{json.dumps(serializable_data, indent=2, ensure_ascii=False)}
+                    {json.dumps(serializable_data, indent=2, ensure_ascii=False)}
 
-Hãy đưa ra:
-1. Danh sách bugs ưu tiên cao
-2. Lý do ưu tiên
-3. Thứ tự xử lý đề xuất
-4. Ước tính effort
+                    Hãy đưa ra:
+                    1. Danh sách bugs ưu tiên cao
+                    2. Lý do ưu tiên
+                    3. Thứ tự xử lý đề xuất
+                    4. Ước tính effort
 
-Trả lời bằng tiếng Việt.
-"""
+                    Trả lời bằng tiếng Việt.
+                    """
         elif analysis_type == "search_answer":
             # For search results, create a summary of found bugs
             bug_summaries = []
@@ -258,18 +257,18 @@ Trả lời bằng tiếng Việt.
                 })
             
             prompt = f"""
-Dựa trên kết quả tìm kiếm, hãy tóm tắt và phân tích các bugs sau:
+                    Dựa trên kết quả tìm kiếm, hãy tóm tắt và phân tích các bugs sau:
 
-{json.dumps(bug_summaries, indent=2, ensure_ascii=False)}
+                    {json.dumps(bug_summaries, indent=2, ensure_ascii=False)}
 
-Hãy cung cấp:
-1. Tóm tắt các bugs tìm thấy
-2. Mức độ nghiêm trọng và ưu tiên
-3. Khuyến nghị xử lý
-4. Mối liên hệ giữa các bugs
+                    Hãy cung cấp:
+                    1. Tóm tắt các bugs tìm thấy
+                    2. Mức độ nghiêm trọng và ưu tiên
+                    3. Khuyến nghị xử lý
+                    4. Mối liên hệ giữa các bugs
 
-Trả lời bằng tiếng Việt, ngắn gọn và súc tích.
-"""
+                    Trả lời bằng tiếng Việt, ngắn gọn và súc tích.
+                    """
         else:
             prompt = f"Phân tích dữ liệu bugs: {json.dumps(serializable_data[:5], ensure_ascii=False)}"
         
@@ -298,9 +297,7 @@ async def health_check():
         return {
             "status": "healthy",
             "service": "bug_management",
-            "database": "connected",
             "total_bugs": total_bugs,
-            "ai_model": "gemini-2.0-flash-exp"
         }
     except Exception as e:
         return {
@@ -638,7 +635,7 @@ async def import_bugs_from_csv(file: UploadFile = File(...)):
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(
-        "bug_import_api:app",
+        "bug_management:app",
         host="0.0.0.0",
         port=8001,
         reload=True

@@ -3,18 +3,10 @@ from utils.logger import logger
 from enum import Enum
 
 DIFY_BASE_URL = "https://api.dify.ai/v1"
-DIFY_BASE_URL_LOCAL = "http://localhost:5001/v1"
 
 
 class DifyMode(Enum):
     CLOUD = "CLOUD"
-    LOCAL = "LOCAL"
-
-def get_dify_base_url(mode):
-    if mode == DifyMode.LOCAL or (isinstance(mode, str) and mode.upper() == "LOCAL"):
-        return DIFY_BASE_URL_LOCAL
-    return DIFY_BASE_URL
-
 
 def get_headers(api_key):
     masked = api_key[:6] + "..." if api_key else "None"
@@ -24,7 +16,7 @@ def get_headers(api_key):
 
 def fetch_info(api_key, mode=DifyMode.CLOUD):
     try:
-        base_url = get_dify_base_url(mode)
+        base_url = DIFY_BASE_URL
         resp = requests.get(
             f"{base_url}/info", headers=get_headers(api_key), timeout=30
         )
@@ -40,7 +32,7 @@ def fetch_info(api_key, mode=DifyMode.CLOUD):
 
 def fetch_site(api_key, mode=DifyMode.CLOUD):
     try:
-        base_url = get_dify_base_url(mode)
+        base_url = DIFY_BASE_URL
         resp = requests.get(
             f"{base_url}/site", headers=get_headers(api_key), timeout=30
         )
@@ -56,7 +48,7 @@ def fetch_site(api_key, mode=DifyMode.CLOUD):
 
 def fetch_parameters(api_key, mode=DifyMode.CLOUD):
     try:
-        base_url = get_dify_base_url(mode)
+        base_url = DIFY_BASE_URL
         resp = requests.get(
             f"{base_url}/parameters", headers=get_headers(api_key), timeout=30
         )
@@ -76,7 +68,7 @@ def upload_document_to_dify(
     """Upload a document to Dify using the /upload endpoint and return the Dify document ID."""
     try:
         logger.info(f"Uploading file to Dify /upload endpoint: {filename}")
-        base_url = get_dify_base_url(mode)
+        base_url = DIFY_BASE_URL
         url = f"{base_url}/files/upload"
         headers = get_headers(api_key)
         files = {"file": (filename, open(filepath, "rb"), mimetype)}
@@ -111,7 +103,7 @@ def run_workflow_with_dify(api_key, inputs, user, response_mode, mode=DifyMode.C
         logger.info(f"User: {user}")
         logger.info(f"Mode: {mode}")
 
-        base_url = get_dify_base_url(mode)
+        base_url = DIFY_BASE_URL
         logger.info(f"Base URL: {base_url}")
         url = f"{base_url}/workflows/run"
         headers = get_headers(api_key)
@@ -134,7 +126,7 @@ def run_workflow_with_dify(api_key, inputs, user, response_mode, mode=DifyMode.C
 def get_workflow_logs(api_key, mode=DifyMode.CLOUD):
     """Get workflow logs from Dify API."""
     try:
-        base_url = get_dify_base_url(mode)
+        base_url = DIFY_BASE_URL
         url = f"{base_url}/workflows/logs"
         headers = get_headers(api_key)
         logger.info(f"GET {url} for workflow logs")

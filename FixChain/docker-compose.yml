@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   mongodb:
     image: mongo:7.0
@@ -15,20 +13,6 @@ services:
     networks:
       - rag_network
     command: mongod --noauth
-
-  mongo-express:
-    image: mongo-express:1.0.0
-    container_name: rag_mongo_express
-    restart: unless-stopped
-    ports:
-      - "8081:8081"
-    environment:
-      ME_CONFIG_MONGODB_URL: mongodb://mongodb:27017/
-      ME_CONFIG_BASICAUTH: false
-    depends_on:
-      - mongodb
-    networks:
-      - rag_network
 
   rag-api:
     build: .
@@ -48,12 +32,6 @@ services:
       - rag_network
     volumes:
       - ./logs:/app/logs
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
 
 volumes:
   mongodb_data:

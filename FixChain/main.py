@@ -20,23 +20,23 @@ from controller import bug_controller, rag_controller, rag_bug_controller
 
 # Create main FastAPI application
 app = FastAPI(
-    title="FixChain2 - Comprehensive Bug Management & RAG System",
+    title="FixChain - Comprehensive Bug Management & RAG System",
     description="""
     Hệ thống quản lý bugs toàn diện với RAG (Retrieval-Augmented Generation) sử dụng MongoDB và Gemini AI.
     
     ## Tính năng chính:
     
-    ### 🐛 Bug Management (Classic)
+    ### Bug Management
     - Import bugs từ JSON/CSV
     - Tìm kiếm và phân tích bugs
     - Thống kê và báo cáo
     
-    ### 🔍 RAG System (Core)
+    ### RAG System
     - Vector search với MongoDB
     - AI-powered document retrieval
     - Embedding generation với Gemini
     
-    ### 🚀 RAG Bug Management (Advanced)
+    ### RAG Bug Management
     - Import bugs với vector embedding
     - AI-powered bug search và similarity
     - Intelligent fix suggestions
@@ -48,15 +48,7 @@ app = FastAPI(
     - **Framework**: FastAPI + Python
     - **Embedding**: text-embedding-004
     """,
-    version="2.0.0",
-    contact={
-        "name": "FixChain2 Team",
-        "email": "support@fixchain2.com"
-    },
-    license_info={
-        "name": "MIT License",
-        "url": "https://opensource.org/licenses/MIT"
-    }
+    version="2.0.0"
 )
 
 # Add CORS middleware
@@ -77,7 +69,7 @@ app.include_router(rag_bug_controller.app, prefix="/api/v1/rag-bugs", tags=["RAG
 async def root():
     """Welcome endpoint với thông tin hệ thống"""
     return {
-        "message": "Welcome to FixChain2 - Comprehensive Bug Management & RAG System",
+        "message": "Welcome to FixChain - Comprehensive Bug Management & RAG System",
         "version": "2.0.0",
         "services": {
             "bug_management": "/api/v1/bugs",
@@ -95,32 +87,13 @@ async def root():
 async def health_check():
     """Health check endpoint"""
     return {
-        "status": "healthy",
-        "services": {
-            "bug_management": "active",
-            "rag_system": "active",
-            "rag_bug_management": "active"
-        },
-        "ai_model": "gemini-2.0-flash-exp",
-        "database": "MongoDB"
+        "status": "healthy"
     }
 
 def main():
     """
     Main function to start the integrated application
     """
-    logger.info("🚀 Starting FixChain2 Integrated API...")
-    logger.info("📚 API Documentation: http://localhost:8000/docs")
-    logger.info("🔍 OpenAPI Schema: http://localhost:8000/openapi.json")
-    logger.info("")
-    logger.info("📋 Available API Groups:")
-    logger.info("  🐛 Bug Management: /api/v1/bugs/*")
-    logger.info("  🔍 RAG System: /api/v1/rag/*")
-    logger.info("  🚀 RAG Bug Management: /api/v1/rag-bugs/*")
-    logger.info("")
-    logger.info("🌐 Starting server on http://localhost:8000")
-    
-    # Use app string for proper reload support
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=False)
 
 if __name__ == "__main__":
